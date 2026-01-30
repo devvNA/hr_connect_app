@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:hr_connect/core/failure/failure.dart';
+import 'package:hr_connect/core/error/failures.dart';
+import 'package:hr_connect/core/utils/logger.dart';
 import 'package:hr_connect/features/auth/domain/entities/employee_entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -102,10 +103,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       return Right(employeeModel);
     } on AuthException catch (e) {
+      Logger.error(e.message);
       return Left(_handleAuthException(e));
     } on PostgrestException catch (e) {
+      Logger.error(e.message);
       return Left(_handlePostgrestException(e));
     } on SocketException catch (_) {
+      Logger.error('Tidak ada koneksi internet');
       return Left(NetworkFailure('Tidak ada koneksi internet'));
     } on TimeoutException catch (_) {
       return Left(NetworkFailure('Koneksi timeout. Silakan coba lagi'));
@@ -184,7 +188,7 @@ Failure _handleAuthException(AuthException exception) {
       return AuthenticationFailure('Email atau password salah');
 
     case '422':
-      return ValidationFailure('Format email tidak valid');
+      return ValidationFailure('User sudah terdaftar');
 
     case '429':
       return AuthenticationFailure(

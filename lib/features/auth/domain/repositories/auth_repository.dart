@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:hr_connect/core/failure/failure.dart';
+import 'package:hr_connect/core/error/failures.dart';
 import 'package:hr_connect/features/auth/domain/entities/employee_entity.dart';
 
 abstract class AuthRepository {

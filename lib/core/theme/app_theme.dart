@@ -228,112 +228,112 @@ class AppShadows {
 class AppTypography {
   AppTypography._();
 
-  static TextStyle get displayLarge => GoogleFonts.poppins(
+  static TextStyle get displayLarge => GoogleFonts.manrope(
     fontSize: 32,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
     height: 1.2,
   );
 
-  static TextStyle get displayMedium => GoogleFonts.poppins(
+  static TextStyle get displayMedium => GoogleFonts.manrope(
     fontSize: 28,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
     height: 1.2,
   );
 
-  static TextStyle get displaySmall => GoogleFonts.poppins(
+  static TextStyle get displaySmall => GoogleFonts.manrope(
     fontSize: 24,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
     height: 1.3,
   );
 
-  static TextStyle get headlineLarge => GoogleFonts.poppins(
+  static TextStyle get headlineLarge => GoogleFonts.manrope(
     fontSize: 22,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     height: 1.3,
   );
 
-  static TextStyle get headlineMedium => GoogleFonts.poppins(
+  static TextStyle get headlineMedium => GoogleFonts.manrope(
     fontSize: 20,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     height: 1.3,
   );
 
-  static TextStyle get headlineSmall => GoogleFonts.poppins(
+  static TextStyle get headlineSmall => GoogleFonts.manrope(
     fontSize: 18,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     height: 1.4,
   );
 
-  static TextStyle get titleLarge => GoogleFonts.poppins(
+  static TextStyle get titleLarge => GoogleFonts.manrope(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     height: 1.4,
   );
 
-  static TextStyle get titleMedium => GoogleFonts.poppins(
+  static TextStyle get titleMedium => GoogleFonts.manrope(
     fontSize: 14,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     height: 1.4,
   );
 
-  static TextStyle get titleSmall => GoogleFonts.poppins(
+  static TextStyle get titleSmall => GoogleFonts.manrope(
     fontSize: 12,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     height: 1.4,
   );
 
-  static TextStyle get bodyLarge => GoogleFonts.poppins(
+  static TextStyle get bodyLarge => GoogleFonts.manrope(
     fontSize: 16,
     fontWeight: FontWeight.normal,
     color: AppColors.textPrimary,
     height: 1.5,
   );
 
-  static TextStyle get bodyMedium => GoogleFonts.poppins(
+  static TextStyle get bodyMedium => GoogleFonts.manrope(
     fontSize: 14,
     fontWeight: FontWeight.normal,
     color: AppColors.textPrimary,
     height: 1.5,
   );
 
-  static TextStyle get bodySmall => GoogleFonts.poppins(
+  static TextStyle get bodySmall => GoogleFonts.manrope(
     fontSize: 12,
     fontWeight: FontWeight.normal,
     color: AppColors.textSecondary,
     height: 1.5,
   );
 
-  static TextStyle get labelLarge => GoogleFonts.poppins(
+  static TextStyle get labelLarge => GoogleFonts.manrope(
     fontSize: 14,
     fontWeight: FontWeight.w500,
     color: AppColors.textPrimary,
     height: 1.4,
   );
 
-  static TextStyle get labelMedium => GoogleFonts.poppins(
+  static TextStyle get labelMedium => GoogleFonts.manrope(
     fontSize: 12,
     fontWeight: FontWeight.w500,
     color: AppColors.textSecondary,
     height: 1.4,
   );
 
-  static TextStyle get labelSmall => GoogleFonts.poppins(
+  static TextStyle get labelSmall => GoogleFonts.manrope(
     fontSize: 10,
     fontWeight: FontWeight.w500,
     color: AppColors.textSecondary,
     height: 1.4,
   );
 
-  static TextStyle get button => GoogleFonts.poppins(
+  static TextStyle get button => GoogleFonts.manrope(
     fontSize: 14,
     fontWeight: FontWeight.w600,
     color: Colors.white,

@@ -80,7 +80,7 @@ class AuthNotifier extends _$AuthNotifier {
 
   /// Sign out the current user
   Future<void> logout() async {
-    // state = AuthLoading(); // Removed to prevent global loading screen
+    state = AuthLoading();
     final result = await ref.read(logoutUseCaseProvider).call();
     result.fold(
       (failure) => state = AuthError(failure.message),
@@ -95,7 +95,6 @@ class AuthNotifier extends _$AuthNotifier {
     required String fullName,
     String? phone,
   }) async {
-    // state = AuthLoading(); // Removed to prevent global loading screen
     final result = await ref
         .read(registerUseCaseProvider)
         .call(email: email, password: password, fullName: fullName);
