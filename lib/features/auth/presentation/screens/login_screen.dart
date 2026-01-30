@@ -52,7 +52,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     // Listen for auth state changes
     ref.listen<AuthState>(authProvider, (previous, next) {
-      if (next is AuthError) {
+      if (next is AuthError && next.source == 'login') {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

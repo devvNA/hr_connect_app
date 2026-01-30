@@ -63,7 +63,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Widget build(BuildContext context) {
     // Listen for state changes
     ref.listen<AuthState>(authProvider, (previous, next) {
-      if (next is AuthError) {
+      if (next is AuthError && next.source == 'register') {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.message),
@@ -72,15 +73,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           ),
         );
         ref.read(authProvider.notifier).clearError();
-      } else if (next is AuthLoaded) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Registrasi berhasil! Silakan masuk.'),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-        context.pop();
       }
     });
 

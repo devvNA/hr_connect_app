@@ -73,7 +73,7 @@ class AuthNotifier extends _$AuthNotifier {
         .read(loginUseCaseProvider)
         .call(email: email, password: password);
     result.fold(
-      (failure) => state = AuthError(failure.message),
+      (failure) => state = AuthError(failure.message, source: 'login'),
       (employee) => state = AuthLoaded(employee),
     );
   }
@@ -83,7 +83,7 @@ class AuthNotifier extends _$AuthNotifier {
     state = AuthLoading();
     final result = await ref.read(logoutUseCaseProvider).call();
     result.fold(
-      (failure) => state = AuthError(failure.message),
+      (failure) => state = AuthError(failure.message, source: 'login'),
       (_) => state = AuthUnauthenticated(),
     );
   }
@@ -99,7 +99,7 @@ class AuthNotifier extends _$AuthNotifier {
         .read(registerUseCaseProvider)
         .call(email: email, password: password, fullName: fullName);
     result.fold(
-      (failure) => state = AuthError(failure.message),
+      (failure) => state = AuthError(failure.message, source: 'register'),
       (employee) => state = AuthLoaded(employee),
     );
   }
@@ -109,7 +109,7 @@ class AuthNotifier extends _$AuthNotifier {
     state = AuthLoading();
     final result = await ref.read(getCurrentEmployeeUseCaseProvider).call();
     result.fold(
-      (failure) => state = AuthError(failure.message),
+      (failure) => state = AuthError(failure.message, source: 'login'),
       (employee) => state = AuthLoaded(employee),
     );
   }
