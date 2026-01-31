@@ -6,6 +6,7 @@ import 'package:hr_connect/features/auth/presentation/providers/auth_states.dart
 import 'package:hr_connect/features/auth/presentation/screens/login_screen.dart';
 import 'package:hr_connect/features/auth/presentation/screens/register_screen.dart';
 import 'package:hr_connect/features/home_dashboard/presentation/screens/home_screen.dart';
+import 'package:hr_connect/features/profile/presentation/screens/profile_screen.dart';
 import 'package:hr_connect/features/splash_screen/presentation/screens/splash_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -44,6 +45,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return const _LoadingScreen();
         },
       ),
+      GoRoute(
+        path: '/profile',
+        name: 'profile',
+        builder: (context, state) {
+          final authState = ref.read(authProvider);
+          if (authState is AuthLoaded) {
+            return ProfileScreen(employee: authState.employee);
+          }
+          return const _LoadingScreen();
+        },
+      ),
     ],
     redirect: (context, state) {
       final authState = ref.read(authProvider);
@@ -61,7 +73,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       }
 
       if (authState is AuthLoaded) {
-        return location == '/home' ? null : '/home';
+        // If coming from login/register/splash, go to home
+        if (isAuthRoute || isSplash || location == '/loading') {
+          return '/home';
+        }
+        // Otherwise allow the navigation (e.g. /profile)
+        return null;
       }
 
       if (authState is AuthUnauthenticated || authState is AuthError) {

@@ -6,14 +6,14 @@ import 'package:hr_connect/features/auth/domain/usecases/login_usecase.dart';
 import 'package:hr_connect/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:hr_connect/features/auth/domain/usecases/register_usecase.dart';
 import 'package:hr_connect/features/auth/presentation/providers/auth_states.dart';
-import 'package:hr_connect/main.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 part 'auth_providers.g.dart';
 
 @riverpod
 AuthRemoteDataSource authRemoteDataSource(Ref ref) {
-  return AuthRemoteDataSourceImpl(client: supabase);
+  return AuthRemoteDataSourceImpl(supabase: Supabase.instance.client);
 }
 
 /// Get current employee use case provider

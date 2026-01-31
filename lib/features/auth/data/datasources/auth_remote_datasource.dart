@@ -8,7 +8,6 @@ import 'package:hr_connect/features/auth/domain/entities/employee_entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/constants/supabase_constants.dart';
-import '../../../../main.dart';
 import '../models/employee_model.dart';
 
 /// Remote data source for authentication operations
@@ -30,7 +29,9 @@ abstract class AuthRemoteDataSource {
 
 /// Implementation of AuthRemoteDataSource using Supabase
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  AuthRemoteDataSourceImpl({required SupabaseClient client});
+  final SupabaseClient supabase;
+
+  AuthRemoteDataSourceImpl({required this.supabase});
 
   @override
   Future<Either<Failure, EmployeeModel>> login({
@@ -142,8 +143,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final user = supabase.auth.currentUser;
       if (user == null) return const Right(null);
 
-      final employee = await _getEmployeeByAuthId(user.id);
-      return Right(employee);
+      // Query directly to 'employees' table
+      final response = await supabase
+          .from(SupabaseConstants.employeesTable)
+          .select()
+          .eq('id', user.id)
+          .maybeSingle();
+
+      if (response == null) return const Right(null);
+
+      return Right(EmployeeModel.fromJson(response));
     } on AuthException catch (e) {
       return Left(_handleAuthException(e));
     } on PostgrestException catch (e) {

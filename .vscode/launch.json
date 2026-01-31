@@ -1,0 +1,35 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "hr_connect (Dev)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_dev.dart",
+            "args": [
+                "--flavor",
+                "dev"
+            ]
+        },
+        // {
+        //     "name": "hr_connect (Staging)",
+        //     "request": "launch",
+        //     "type": "dart",
+        //     "program": "lib/main_staging.dart",
+        //     "args": [
+        //         "--flavor",
+        //         "staging"
+        //     ]
+        // },
+        {
+            "name": "hr_connect (Prod)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_prod.dart",
+            "args": [
+                "--flavor",
+                "prod"
+            ]
+        }
+    ]
+}
