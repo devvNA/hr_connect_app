@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
 import 'package:hr_connect/features/auth/domain/entities/employee_entity.dart';
 import 'package:hr_connect/features/profile/presentation/widgets/activity_timeline_item.dart';
@@ -8,59 +7,25 @@ import 'package:hr_connect/features/profile/presentation/widgets/profile_action_
 import 'package:hr_connect/features/profile/presentation/widgets/profile_info_item.dart';
 import 'package:hr_connect/features/profile/presentation/widgets/profile_info_section.dart';
 
-class ProfileScreen extends StatelessWidget {
+/// Profile content - to be used inside MainShell
+class ProfileContent extends StatelessWidget {
   final EmployeeEntity employee;
 
-  const ProfileScreen({super.key, required this.employee});
+  const ProfileContent({super.key, required this.employee});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: CustomScrollView(
-        slivers: [
-          _buildSliverAppBar(context),
-          SliverToBoxAdapter(child: _buildHRBanner()),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              _buildProfileHeader(context),
-              _buildActionButtons(),
-              _buildContent(context),
-            ]),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSliverAppBar(BuildContext context) {
-    return SliverAppBar(
-      pinned: true,
-      backgroundColor: AppColors.surface.withValues(alpha: 0.95),
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
-        onPressed: () => context.pop(),
-      ),
-      title: const Text(
-        'Employee Profile',
-        style: TextStyle(
-          color: AppColors.textPrimary,
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      centerTitle: true,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.more_horiz, color: AppColors.textPrimary),
-          onPressed: () {},
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(child: _buildHRBanner()),
+        SliverList(
+          delegate: SliverChildListDelegate([
+            _buildProfileHeader(context),
+            _buildActionButtons(),
+            _buildContent(context),
+          ]),
         ),
       ],
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1),
-        child: Container(color: AppColors.border, height: 1),
-      ),
     );
   }
 
@@ -389,7 +354,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 100),
         ],
       ),
     );

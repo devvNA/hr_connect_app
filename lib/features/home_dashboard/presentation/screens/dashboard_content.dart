@@ -4,43 +4,26 @@ import 'package:hr_connect/core/theme/app_color.dart';
 import 'package:hr_connect/features/auth/domain/entities/employee_entity.dart';
 import 'package:hr_connect/features/home_dashboard/presentation/widgets/approval_list_item.dart';
 import 'package:hr_connect/features/home_dashboard/presentation/widgets/attendance_donut.dart';
-import 'package:hr_connect/features/home_dashboard/presentation/widgets/home_drawer.dart';
-import 'package:hr_connect/features/home_dashboard/presentation/widgets/home_header.dart';
 import 'package:hr_connect/features/home_dashboard/presentation/widgets/home_stats_card.dart';
 import 'package:intl/intl.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
+/// Dashboard content - to be used inside MainShell
+class DashboardContent extends ConsumerWidget {
   final EmployeeEntity employee;
 
-  const HomeScreen({super.key, required this.employee});
+  const DashboardContent({super.key, required this.employee});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends ConsumerState<HomeScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  Widget build(BuildContext context) {
-    // Current date formatter
+  Widget build(BuildContext context, WidgetRef ref) {
     final now = DateTime.now();
     final dateString = DateFormat('EEEE, d MMM').format(now);
 
     return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: AppColors.background,
-      drawer: HomeDrawer(employee: widget.employee),
-      appBar: HomeHeader(
-        employee: widget.employee,
-        onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
-        onNotificationPressed: () {},
-      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          // TODO: Quick action
+        },
         backgroundColor: AppColors.primary,
-        elevation: 4,
-        shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white, size: 30),
       ),
       body: ListView(
@@ -63,7 +46,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Good Morning,\n${widget.employee.fullName}',
+                  'Good Morning,\n${employee.fullName.split(' ').map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1).toLowerCase() : '').join(' ')}',
                   style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 24,
@@ -175,7 +158,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     // Who is Away Widget
                     Expanded(
                       child: Container(
-                        height: 190, // Match donut height roughly
+                        height: 190,
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: AppColors.surface,

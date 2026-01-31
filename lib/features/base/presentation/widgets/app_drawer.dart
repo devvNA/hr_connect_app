@@ -1,17 +1,21 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide NavigationDestination;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
 import 'package:hr_connect/features/auth/domain/entities/employee_entity.dart';
 import 'package:hr_connect/features/auth/presentation/providers/auth_providers.dart';
+import 'package:hr_connect/features/base/presentation/providers/navigation_provider.dart';
 
-class HomeDrawer extends ConsumerWidget {
+/// Persistent app drawer used across all main screens
+class AppDrawer extends ConsumerWidget {
   final EmployeeEntity employee;
 
-  const HomeDrawer({super.key, required this.employee});
+  const AppDrawer({super.key, required this.employee});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentDestination = ref.watch(navigationProvider);
+
     return Drawer(
       backgroundColor: AppColors.surface,
       surfaceTintColor: Colors.transparent,
@@ -34,7 +38,7 @@ class HomeDrawer extends ConsumerWidget {
                     Stack(
                       children: [
                         Container(
-                          width: 56, // size-14
+                          width: 56,
                           height: 56,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -53,7 +57,7 @@ class HomeDrawer extends ConsumerWidget {
                           bottom: 0,
                           right: 0,
                           child: Container(
-                            width: 14, // size-3.5
+                            width: 14,
                             height: 14,
                             decoration: BoxDecoration(
                               color: AppColors.success,
@@ -104,7 +108,9 @@ class HomeDrawer extends ConsumerWidget {
                 InkWell(
                   onTap: () {
                     Scaffold.of(context).closeDrawer();
-                    context.pushNamed('profile');
+                    ref.read(navigationProvider.notifier).state =
+                        NavigationDestination.profile;
+                    context.go(NavigationDestination.profile.path);
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -142,36 +148,60 @@ class HomeDrawer extends ConsumerWidget {
               child: Column(
                 children: [
                   _buildMenuItem(
+                    context: context,
+                    ref: ref,
                     icon: Icons.grid_view_rounded,
                     label: 'Dashboard',
-                    isActive: true,
-                    onTap: () {},
+                    destination: NavigationDestination.dashboard,
+                    isActive:
+                        currentDestination == NavigationDestination.dashboard,
                   ),
                   _buildMenuItem(
+                    context: context,
+                    ref: ref,
                     icon: Icons.group_outlined,
                     label: 'Employees',
-                    onTap: () {},
+                    destination: NavigationDestination.employees,
+                    isActive:
+                        currentDestination == NavigationDestination.employees,
                   ),
                   _buildMenuItem(
+                    context: context,
+                    ref: ref,
                     icon: Icons.calendar_today_outlined,
                     label: 'Attendance',
-                    onTap: () {},
+                    destination: NavigationDestination.attendance,
+                    isActive:
+                        currentDestination == NavigationDestination.attendance,
                   ),
                   _buildMenuItem(
+                    context: context,
+                    ref: ref,
                     icon: Icons.flight_takeoff,
                     label: 'Leave Requests',
-                    onTap: () {},
+                    destination: NavigationDestination.leaveRequests,
+                    isActive:
+                        currentDestination ==
+                        NavigationDestination.leaveRequests,
                   ),
                   _buildMenuItem(
+                    context: context,
+                    ref: ref,
                     icon: Icons.check_circle_outline,
                     label: 'Approvals',
+                    destination: NavigationDestination.approvals,
                     badgeCount: 3,
-                    onTap: () {},
+                    isActive:
+                        currentDestination == NavigationDestination.approvals,
                   ),
                   _buildMenuItem(
+                    context: context,
+                    ref: ref,
                     icon: Icons.settings_outlined,
                     label: 'Settings',
-                    onTap: () {},
+                    destination: NavigationDestination.settings,
+                    isActive:
+                        currentDestination == NavigationDestination.settings,
                   ),
                 ],
               ),
@@ -251,18 +281,24 @@ class HomeDrawer extends ConsumerWidget {
   }
 
   Widget _buildMenuItem({
+    required BuildContext context,
+    required WidgetRef ref,
     required IconData icon,
     required String label,
+    required NavigationDestination destination,
     bool isActive = false,
     int? badgeCount,
-    required VoidCallback onTap,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onTap,
+          onTap: () {
+            Scaffold.of(context).closeDrawer();
+            ref.read(navigationProvider.notifier).state = destination;
+            context.go(destination.path);
+          },
           borderRadius: BorderRadius.circular(12),
           child: Container(
             height: 48,
@@ -284,8 +320,7 @@ class HomeDrawer extends ConsumerWidget {
                     label,
                     style: TextStyle(
                       color: isActive
-                          ? AppColors
-                                .primaryDark // Slightly darker for text
+                          ? AppColors.primaryDark
                           : AppColors.textSecondary,
                       fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
                       fontSize: 15,

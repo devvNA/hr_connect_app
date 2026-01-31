@@ -1,13 +1,16 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide NavigationDestination;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
 import 'package:hr_connect/features/auth/domain/entities/employee_entity.dart';
+import 'package:hr_connect/features/base/presentation/providers/navigation_provider.dart';
 
-class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
+/// Persistent app header/appbar used across all main screens
+class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
   final EmployeeEntity employee;
   final VoidCallback onMenuPressed;
   final VoidCallback onNotificationPressed;
 
-  const HomeHeader({
+  const AppHeader({
     super.key,
     required this.employee,
     required this.onMenuPressed,
@@ -15,7 +18,11 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentDestination = ref.watch(navigationProvider);
+    final isDashboard = currentDestination == NavigationDestination.dashboard;
+    final title = currentDestination.displayTitle;
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.9),
@@ -42,28 +49,32 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'HR',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                  // HR Logo - only show on dashboard
+                  if (isDashboard) ...[
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'HR',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  const Text(
-                    'Connect',
-                    style: TextStyle(
+                    const SizedBox(width: 8),
+                  ],
+                  // Title
+                  Text(
+                    title,
+                    style: const TextStyle(
                       fontFamily: 'Manrope',
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -104,44 +115,10 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(width: 12),
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.border, width: 1),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(18),
-                      child: employee.avatarUrl != null
-                          ? Image.network(
-                              employee.avatarUrl!,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, _, _) => _buildPlaceholder(),
-                            )
-                          : _buildPlaceholder(),
-                    ),
-                  ),
                 ],
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPlaceholder() {
-    return Center(
-      child: Text(
-        employee.fullName.isNotEmpty
-            ? employee.fullName[0].toUpperCase()
-            : '?',
-        style: const TextStyle(
-          color: AppColors.textSecondary,
-          fontWeight: FontWeight.bold,
         ),
       ),
     );

@@ -117,7 +117,7 @@ class _DonutChartPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
-    
+
     // Draw background circle
     final bgPaint = Paint()
       ..color = backgroundColor
@@ -134,13 +134,14 @@ class _DonutChartPainter extends CustomPainter {
     final gradient = SweepGradient(
       startAngle: startAngle,
       endAngle: startAngle + sweepAngle,
-      colors: [color, color.withValues(alpha: 0.8)], 
+      colors: [color, color.withValues(alpha: 0.8)],
       // Simplified gradient for Flutter, mimicking the CSS conic
     );
 
     final paint = Paint()
       ..shader = gradient.createShader(rect)
-      ..style = PaintingStyle.fill; // We fill, then use inner circle widget to mask
+      ..style =
+          PaintingStyle.fill; // We fill, then use inner circle widget to mask
 
     canvas.drawArc(rect, startAngle, sweepAngle, true, paint);
   }

@@ -110,11 +110,7 @@ class ApprovalListItem extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                           Icon(
-                            icon,
-                            size: 16,
-                            color: AppColors.textSecondary,
-                          ),
+                          Icon(icon, size: 16, color: AppColors.textSecondary),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
