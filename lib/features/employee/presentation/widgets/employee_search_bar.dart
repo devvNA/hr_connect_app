@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 
 class EmployeeSearchBar extends StatefulWidget {
   final ValueChanged<String>? onSearch;
@@ -13,6 +14,7 @@ class EmployeeSearchBar extends StatefulWidget {
 }
 
 class _EmployeeSearchBarState extends State<EmployeeSearchBar> {
+  // ... (existing logic)
   final TextEditingController _controller = TextEditingController();
   Timer? _debounce;
 
@@ -24,7 +26,6 @@ class _EmployeeSearchBarState extends State<EmployeeSearchBar> {
   }
 
   void _onSearchChanged(String query) {
-    // Debounce search to avoid too many API calls
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       widget.onSearch?.call(query);
@@ -41,16 +42,17 @@ class _EmployeeSearchBarState extends State<EmployeeSearchBar> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.mdRadius,
         border: Border.all(color: AppColors.border),
-        boxShadow: AppColors.shadowSoft,
+        boxShadow: AppShadows.small,
       ),
       child: TextField(
         controller: _controller,
         onChanged: _onSearchChanged,
+        style: AppTypography.bodyMedium,
         decoration: InputDecoration(
           hintText: 'Search name, role, or ID...',
-          hintStyle: const TextStyle(color: AppColors.textLight),
+          hintStyle: AppTypography.bodyMedium.copyWith(color: AppColors.textLight),
           prefixIcon: const Icon(Icons.search, color: AppColors.textLight),
           suffixIcon: Row(
             mainAxisSize: MainAxisSize.min,
@@ -78,7 +80,7 @@ class _EmployeeSearchBarState extends State<EmployeeSearchBar> {
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
+            horizontal: AppSpacing.lg,
             vertical: 14,
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 import 'package:hr_connect/features/auth/domain/entities/employee_entity.dart';
 import 'package:hr_connect/features/home_dashboard/presentation/widgets/approval_list_item.dart';
 import 'package:hr_connect/features/home_dashboard/presentation/widgets/attendance_donut.dart';
@@ -29,52 +30,48 @@ class DashboardContent extends ConsumerWidget {
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xxl),
           // Welcome & Search
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   dateString,
-                  style: const TextStyle(
+                  style: AppTypography.bodyMedium.copyWith(
                     color: AppColors.textLight,
-                    fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: AppSpacing.xs),
                 Text(
                   'Good Morning,\n${employee.fullName.split(' ').map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1).toLowerCase() : '').join(' ')}',
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
+                  style: AppTypography.displaySmall.copyWith(
                     height: 1.2,
                     letterSpacing: -0.5,
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSpacing.xxl),
                 // Search Input
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: AppColors.shadowSoft,
+                    borderRadius: AppRadius.mdRadius,
+                    boxShadow: AppShadows.small,
                   ),
-                  child: const TextField(
+                  child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Search employees, actions...',
-                      hintStyle: TextStyle(color: AppColors.textLight),
-                      prefixIcon: Icon(
+                      hintStyle: AppTypography.bodyMedium.copyWith(color: AppColors.textLight),
+                      prefixIcon: const Icon(
                         Icons.search,
                         color: AppColors.textLight,
                       ),
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 16,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                        vertical: AppSpacing.lg,
                       ),
                     ),
                   ),
@@ -83,12 +80,12 @@ class DashboardContent extends ConsumerWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xxl),
 
           // Quick Stats Carousel
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
             child: Row(
               children: [
                 const HomeStatsCard(
@@ -101,7 +98,7 @@ class DashboardContent extends ConsumerWidget {
                   changeColor: AppColors.success,
                   changeBgColor: AppColors.successContainer,
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: AppSpacing.lg),
                 const HomeStatsCard(
                   icon: Icons.person_add_outlined,
                   iconColor: AppColors.purple,
@@ -112,7 +109,7 @@ class DashboardContent extends ConsumerWidget {
                   changeColor: AppColors.purple,
                   changeBgColor: AppColors.purpleContainer,
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: AppSpacing.lg),
                 HomeStatsCard(
                   icon: Icons.trending_down,
                   iconColor: AppColors.warning,
@@ -127,23 +124,21 @@ class DashboardContent extends ConsumerWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xxl),
 
           // Today's Overview Grid
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Today's Overview",
-                  style: TextStyle(
-                    fontSize: 18,
+                  style: AppTypography.headlineSmall.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.md),
                 Row(
                   children: [
                     // Attendance Widget
@@ -154,17 +149,17 @@ class DashboardContent extends ConsumerWidget {
                         absentCount: 50,
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: AppSpacing.lg),
                     // Who is Away Widget
                     Expanded(
                       child: Container(
                         height: 190,
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(AppSpacing.lg),
                         decoration: BoxDecoration(
                           color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: AppRadius.lgRadius,
                           border: Border.all(color: AppColors.border),
-                          boxShadow: AppColors.shadowCard,
+                          boxShadow: AppShadows.card,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +171,7 @@ class DashboardContent extends ConsumerWidget {
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     color: AppColors.warningContainer,
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: AppRadius.smRadius,
                                   ),
                                   child: const Icon(
                                     Icons.beach_access,
@@ -184,26 +179,21 @@ class DashboardContent extends ConsumerWidget {
                                     size: 20,
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   '4',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.textPrimary,
-                                  ),
+                                  style: AppTypography.displaySmall,
                                 ),
                               ],
                             ),
                             const Spacer(),
-                            const Text(
+                            Text(
                               'Employees on leave',
-                              style: TextStyle(
-                                fontSize: 14,
+                              style: AppTypography.bodyMedium.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.textSecondary,
                               ),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: AppSpacing.md),
                             SizedBox(
                               height: 32,
                               child: Stack(
@@ -233,13 +223,11 @@ class DashboardContent extends ConsumerWidget {
                                           width: 2,
                                         ),
                                       ),
-                                      child: const Center(
+                                      child: Center(
                                         child: Text(
                                           '+1',
-                                          style: TextStyle(
-                                            fontSize: 10,
+                                          style: AppTypography.labelSmall.copyWith(
                                             fontWeight: FontWeight.bold,
-                                            color: AppColors.textSecondary,
                                           ),
                                         ),
                                       ),
@@ -258,31 +246,28 @@ class DashboardContent extends ConsumerWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xxl),
 
           // Pending Approvals - Only visible for Admin role
           if (employee.isAdmin)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Pending Approvals',
-                        style: TextStyle(
-                          fontSize: 18,
+                        style: AppTypography.headlineSmall.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
                         ),
                       ),
                       TextButton(
                         onPressed: () {},
-                        child: const Text(
+                        child: Text(
                           'View all',
-                          style: TextStyle(
-                            fontSize: 14,
+                          style: AppTypography.labelLarge.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
@@ -290,7 +275,7 @@ class DashboardContent extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSpacing.md),
                   ApprovalListItem(
                     name: 'Sarah Jenkins',
                     timeAgo: '2h ago',
@@ -301,7 +286,7 @@ class DashboardContent extends ConsumerWidget {
                     onReject: () {},
                     avatarUrl: 'https://i.pravatar.cc/100?img=1',
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSpacing.md),
                   ApprovalListItem(
                     name: 'Mike Ross',
                     timeAgo: '5h ago',

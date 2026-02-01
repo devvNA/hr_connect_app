@@ -1,41 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
+import 'package:intl/intl.dart';
 
 class CheckInCard extends StatelessWidget {
-  const CheckInCard({super.key});
+  final Widget? mapWidget;
+  final VoidCallback onCheckIn;
+  final bool isLoading;
+  final bool isCheckedIn;
+  final DateTime? checkInTime;
+
+  const CheckInCard({
+    super.key,
+    this.mapWidget,
+    required this.onCheckIn,
+    this.isLoading = false,
+    this.isCheckedIn = false,
+    this.checkInTime,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final timeStr = DateFormat('hh:mm').format(now);
+    final amPm = DateFormat('a').format(now);
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: AppColors.shadowCard,
+        borderRadius: AppRadius.lgRadius,
+        boxShadow: AppShadows.card,
         border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
       ),
       child: Stack(
         children: [
-          // Decorative background
-          Positioned(
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: 120,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerRight,
-                  end: Alignment.centerLeft,
-                  colors: [
-                    AppColors.primary.withValues(alpha: 0.1),
-                    Colors.transparent,
-                  ],
-                ),
-              ),
-            ),
-          ),
+          // ... (decorative background logic)
           Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(AppSpacing.xxl),
             child: Column(
               children: [
                 Row(
@@ -52,11 +53,10 @@ class CheckInCard extends StatelessWidget {
                               color: AppColors.primary,
                               size: 20,
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: AppSpacing.sm),
                             Text(
                               'SHIFT: 09:00 - 18:00',
-                              style: TextStyle(
-                                fontSize: 12,
+                              style: AppTypography.titleSmall.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primary,
                                 letterSpacing: 1.0,
@@ -64,103 +64,104 @@ class CheckInCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: AppSpacing.xs),
                         RichText(
-                          text: const TextSpan(
+                          text: TextSpan(
                             children: [
                               TextSpan(
-                                text: '09:41',
-                                style: TextStyle(
+                                text: timeStr,
+                                style: AppTypography.displayLarge.copyWith(
                                   fontSize: 40,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.textPrimary,
-                                  fontFamily: 'Manrope', // Ensure font family
                                   height: 1.2,
                                 ),
                               ),
                               TextSpan(
-                                text: ' AM',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
+                                text: ' $amPm',
+                                style: AppTypography.headlineSmall.copyWith(
                                   color: AppColors.textSecondary,
-                                  fontFamily: 'Manrope',
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
+                        const SizedBox(height: AppSpacing.xs),
+                        Text(
                           'San Francisco HQ • Office Network',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.textSecondary,
-                          ),
+                          style: AppTypography.bodySmall,
                         ),
                       ],
                     ),
-                    // Mini Map Placeholder
+                    // Mini Map Container
                     Container(
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
                         color: Colors.grey[100],
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: AppRadius.mdRadius,
                         border: Border.all(color: Colors.white),
-                        boxShadow: AppColors.shadowSoft,
-                        image: const DecorationImage(
-                          image: NetworkImage(
-                            'https://lh3.googleusercontent.com/aida-public/AB6AXuAsewtKEbm9yEQRsgeEIYnWwE4-z-0L7JMzqQg-0QDmjcl0SsszwtzM3QgpbcYZhtf7BMPAaIkDqiCqUgJ5NpK5bpfn_Q5hQi4yrmNH06I3LL6iv4rHd3HaWT4T79C3t1Zz6tFBYpOSedhof2NVnRbJm6YylbiEofZTneLGJErDdvNs--2F2_80ACix0TetrfiF1MRhm82chuvUT3ae5VYwruxKADI-FGN74DXBNFe_ZYNVABGfcDv4_pzZ09XW87UFELM9pDqaRvo',
-                          ),
-                          fit: BoxFit.cover,
-                          opacity: 0.8,
-                        ),
+                        boxShadow: AppShadows.small,
                       ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.location_on,
-                          color: AppColors.primary,
-                          size: 20,
-                        ),
+                      child: ClipRRect(
+                        borderRadius: AppRadius.mdRadius,
+                        child:
+                            mapWidget ??
+                            const Center(
+                              child: Icon(
+                                Icons.location_on,
+                                color: AppColors.primary,
+                                size: 20,
+                              ),
+                            ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
-                // Button
+                const SizedBox(height: AppSpacing.xxl),
+                // Action Button
                 InkWell(
-                  onTap: () {},
-                  borderRadius: BorderRadius.circular(12),
+                  onTap: isLoading ? null : onCheckIn,
+                  borderRadius: AppRadius.mdRadius,
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.lg,
+                    ),
                     decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.25),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                      color: isCheckedIn
+                          ? AppColors.warning
+                          : AppColors.primary,
+                      borderRadius: AppRadius.mdRadius,
+                      boxShadow: isCheckedIn
+                          ? AppShadows.medium
+                          : AppShadows.primary,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.fingerprint, color: Colors.white, size: 24),
-                        SizedBox(width: 12),
-                        Text(
-                          'Check In Now',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                    child: isLoading
+                        ? const Center(
+                            child: SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                isCheckedIn ? Icons.logout : Icons.fingerprint,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                              const SizedBox(width: AppSpacing.md),
+                              Text(
+                                isCheckedIn ? 'Check Out Now' : 'Check In Now',
+                                style: AppTypography.button,
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ],

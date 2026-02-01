@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 
 class AttendanceMetrics extends StatelessWidget {
   const AttendanceMetrics({super.key});
@@ -49,11 +50,11 @@ class AttendanceMetrics extends StatelessWidget {
     required String label,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: AppColors.shadowCard,
+        borderRadius: AppRadius.mdRadius,
+        boxShadow: AppShadows.card,
         border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
       ),
       child: Column(
@@ -67,20 +68,17 @@ class AttendanceMetrics extends StatelessWidget {
             ),
             child: Icon(icon, color: iconColor, size: 18),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 20,
+            style: AppTypography.headlineMedium.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 10,
+            style: AppTypography.labelSmall.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.textSecondary,
               letterSpacing: 0.5,

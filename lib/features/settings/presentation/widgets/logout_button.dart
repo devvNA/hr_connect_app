@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 import 'package:hr_connect/features/auth/presentation/providers/auth_providers.dart';
 
 class LogoutButton extends ConsumerWidget {
@@ -12,14 +13,14 @@ class LogoutButton extends ConsumerWidget {
       onTap: () {
         ref.read(authProvider.notifier).logout();
       },
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: AppRadius.lgRadius,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: AppRadius.lgRadius,
           border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
-          boxShadow: AppColors.shadowCard,
+          boxShadow: AppShadows.card,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -29,11 +30,10 @@ class LogoutButton extends ConsumerWidget {
               color: AppColors.error,
               size: 20,
             ),
-            const SizedBox(width: 8),
-            const Text(
+            const SizedBox(width: AppSpacing.sm),
+            Text(
               'Log Out',
-              style: TextStyle(
-                fontSize: 16,
+              style: AppTypography.titleMedium.copyWith(
                 fontWeight: FontWeight.bold,
                 color: AppColors.error,
               ),

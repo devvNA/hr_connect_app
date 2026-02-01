@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 import 'package:hr_connect/features/settings/presentation/widgets/logout_button.dart';
 import 'package:hr_connect/features/settings/presentation/widgets/settings_section.dart';
 import 'package:hr_connect/features/settings/presentation/widgets/settings_tile.dart';
@@ -22,7 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         children: [
           // Account Section
@@ -52,7 +53,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xxl),
 
           // Preferences Section
           SettingsSection(
@@ -82,7 +83,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xxl),
 
           // Company Section (Admin View Mockup)
           SettingsSection(
@@ -101,22 +102,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xxxl),
 
           // Logout Button
           const LogoutButton(),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xxl),
 
           // Version Info
-          const Text(
+          Text(
             'HRIS App v2.4.1 (Build 8902)',
-            style: TextStyle(
+            style: AppTypography.bodySmall.copyWith(
               color: AppColors.textLight,
-              fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xxxl),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 
 class SettingsTile extends StatelessWidget {
   final IconData icon;
@@ -26,7 +27,7 @@ class SettingsTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Row(
           children: [
             Container(
@@ -34,7 +35,7 @@ class SettingsTile extends StatelessWidget {
               height: 40,
               decoration: BoxDecoration(
                 color: iconBgColor ?? AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: AppRadius.smRadius,
               ),
               child: Icon(
                 icon,
@@ -42,25 +43,22 @@ class SettingsTile extends StatelessWidget {
                 size: 20,
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: AppSpacing.lg),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 14,
+                    style: AppTypography.titleMedium.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
                     ),
                   ),
                   if (subtitle != null) ...[
                     const SizedBox(height: 2),
                     Text(
                       subtitle!,
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: AppTypography.bodySmall.copyWith(
                         color: AppColors.textSecondary,
                       ),
                     ),
@@ -71,12 +69,11 @@ class SettingsTile extends StatelessWidget {
             if (valueLabel != null) ...[
               Text(
                 valueLabel!,
-                style: const TextStyle(
-                  fontSize: 12,
+                style: AppTypography.bodySmall.copyWith(
                   color: AppColors.textSecondary,
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSpacing.sm),
             ],
             const Icon(
               Icons.chevron_right,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 
 class SettingsSection extends StatelessWidget {
   final String title;
@@ -17,11 +18,13 @@ class SettingsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 4.0,
+            vertical: AppSpacing.sm,
+          ),
           child: Text(
             title.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 12,
+            style: AppTypography.labelSmall.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.textSecondary,
               letterSpacing: 1.0,
@@ -31,8 +34,8 @@ class SettingsSection extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: AppColors.shadowCard,
+            borderRadius: AppRadius.lgRadius,
+            boxShadow: AppShadows.card,
             border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
           ),
           child: Column(
@@ -52,8 +55,8 @@ class SettingsSection extends StatelessWidget {
           const Divider(
             height: 1,
             thickness: 1,
-            indent: 16,
-            endIndent: 16,
+            indent: AppSpacing.lg,
+            endIndent: AppSpacing.lg,
             color: AppColors.border,
           ),
         );

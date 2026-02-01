@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 
 class HomeStatsCard extends StatelessWidget {
   final IconData icon;
@@ -27,13 +28,13 @@ class HomeStatsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 160,
-      height: 144, // h-36 = 9rem = 144px
-      padding: const EdgeInsets.all(16),
+      height: 144,
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadius.lgRadius,
         border: Border.all(color: AppColors.border),
-        boxShadow: AppColors.shadowCard,
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,9 +54,7 @@ class HomeStatsCard extends StatelessWidget {
             children: [
               Text(
                 label.toUpperCase(),
-                style: const TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 10, // text-xs
+                style: AppTypography.labelSmall.copyWith(
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.5,
                 ),
@@ -67,13 +66,11 @@ class HomeStatsCard extends StatelessWidget {
                 children: [
                   Text(
                     value,
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 24, // text-2xl
-                      fontWeight: FontWeight.bold,
+                    style: AppTypography.displaySmall.copyWith(
+                      height: 1.0,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: AppSpacing.sm),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 6,
@@ -81,13 +78,12 @@ class HomeStatsCard extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: changeBgColor,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: AppRadius.xsRadius,
                     ),
                     child: Text(
                       changeLabel,
-                      style: TextStyle(
+                      style: AppTypography.labelSmall.copyWith(
                         color: changeColor,
-                        fontSize: 10, // text-xs
                         fontWeight: FontWeight.bold,
                       ),
                     ),

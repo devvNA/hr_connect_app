@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 
 class EmployeeCard extends StatelessWidget {
   final String name;
   final String role;
   final String department;
   final String imageUrl;
-  final String status; // 'Active', 'On Leave', 'Remote', 'Inactive'
+  final String status;
   final Color statusColor;
   final Color statusBgColor;
 
@@ -24,13 +25,13 @@ class EmployeeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      margin: const EdgeInsets.only(bottom: AppSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.mdRadius,
         border: Border.all(color: AppColors.border),
-        boxShadow: AppColors.shadowCard,
+        boxShadow: AppShadows.card,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,32 +53,27 @@ class EmployeeCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: AppSpacing.lg),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: AppTypography.titleLarge.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     role,
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: AppTypography.bodySmall.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: AppColors.textSecondary,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSpacing.xs),
                   Text(
                     department.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 10,
+                    style: AppTypography.labelSmall.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppColors.primary.withValues(alpha: 0.8),
                       letterSpacing: 0.5,
@@ -91,23 +87,25 @@ class EmployeeCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.sm,
+                  vertical: AppSpacing.xs,
+                ),
                 decoration: BoxDecoration(
                   color: statusBgColor,
-                  borderRadius: BorderRadius.circular(100),
+                  borderRadius: AppRadius.fullRadius,
                   border: Border.all(color: statusColor.withValues(alpha: 0.2)),
                 ),
                 child: Text(
                   status,
-                  style: TextStyle(
-                    fontSize: 10,
+                  style: AppTypography.labelSmall.copyWith(
                     fontWeight: FontWeight.bold,
                     color: statusColor,
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-              Icon(Icons.more_vert, size: 20, color: AppColors.textLight),
+              const SizedBox(height: AppSpacing.sm),
+              const Icon(Icons.more_vert, size: 20, color: AppColors.textLight),
             ],
           ),
         ],

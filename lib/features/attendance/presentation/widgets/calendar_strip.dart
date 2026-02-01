@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 
 class CalendarStrip extends StatelessWidget {
   const CalendarStrip({super.key});
@@ -30,29 +31,25 @@ class CalendarStrip extends StatelessWidget {
   Widget _buildDayItem(String day, String date) {
     return Container(
       width: 60,
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        // No border for inactive as per design (or transparent)
+        borderRadius: AppRadius.lgRadius,
       ),
       child: Column(
         children: [
           Text(
             day,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+            style: AppTypography.labelSmall.copyWith(
               color: AppColors.textSecondary,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             date,
-            style: const TextStyle(
-              fontSize: 18,
+            style: AppTypography.headlineSmall.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
             ),
           ),
         ],
@@ -65,38 +62,30 @@ class CalendarStrip extends StatelessWidget {
       scale: 1.05,
       child: Container(
         width: 60,
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
         decoration: BoxDecoration(
           color: AppColors.primary,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.3),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          borderRadius: AppRadius.lgRadius,
+          boxShadow: AppShadows.primary,
         ),
         child: Column(
           children: [
             Text(
               day,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+              style: AppTypography.labelSmall.copyWith(
                 color: Colors.white.withValues(alpha: 0.8),
+                fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: AppSpacing.xs),
             Text(
               date,
-              style: const TextStyle(
-                fontSize: 18,
+              style: AppTypography.headlineSmall.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: AppSpacing.xs),
             Container(
               width: 4,
               height: 4,
@@ -114,20 +103,14 @@ class CalendarStrip extends StatelessWidget {
   Widget _buildCalendarIcon() {
     return Container(
       width: 60,
-      height: 72, // Approx height to match others
+      height: 72,
       decoration: BoxDecoration(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.border, // dashed border simulated
-          width: 2,
-        ),
+        borderRadius: AppRadius.lgRadius,
+        border: Border.all(color: AppColors.border, width: 2),
       ),
       child: const Center(
-        child: Icon(
-          Icons.calendar_month,
-          color: AppColors.textLight,
-        ),
+        child: Icon(Icons.calendar_month, color: AppColors.textLight),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 
 class AttendanceDonut extends StatelessWidget {
   final double percentage;
@@ -18,12 +19,12 @@ class AttendanceDonut extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadius.lgRadius,
         border: Border.all(color: AppColors.border),
-        boxShadow: AppColors.shadowCard,
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         children: [
@@ -49,16 +50,13 @@ class AttendanceDonut extends StatelessWidget {
                     children: [
                       Text(
                         '${(percentage * 100).toInt()}%',
-                        style: const TextStyle(
-                          fontSize: 20,
+                        style: AppTypography.headlineMedium.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
                         ),
                       ),
-                      const Text(
+                      Text(
                         'PRESENT',
-                        style: TextStyle(
-                          fontSize: 10,
+                        style: AppTypography.labelSmall.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColors.textSecondary,
                         ),
@@ -69,7 +67,7 @@ class AttendanceDonut extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.md),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -87,14 +85,12 @@ class AttendanceDonut extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 12, color: AppColors.textLight),
+          style: AppTypography.bodySmall.copyWith(color: AppColors.textLight),
         ),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 16,
+          style: AppTypography.titleLarge.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
           ),
         ),
       ],

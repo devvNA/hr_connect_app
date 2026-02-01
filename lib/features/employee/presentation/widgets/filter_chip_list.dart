@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 import 'package:hr_connect/core/utils/shimmering.dart';
 import 'package:hr_connect/features/employee/presentation/providers/employee_providers.dart';
 import 'package:hr_connect/features/employee/presentation/providers/employee_states.dart';
@@ -33,11 +34,11 @@ class FilterChipList extends ConsumerWidget {
                     .read(departmentListProvider.notifier)
                     .selectDepartment(null),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSpacing.sm),
               // Department chips from database
               ...departments.map(
                 (dept) => Padding(
-                  padding: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.only(right: AppSpacing.sm),
                   child: _buildChip(
                     context,
                     label: dept.name,
@@ -62,8 +63,8 @@ class FilterChipList extends ConsumerWidget {
       child: Row(
         children: List.generate(
           4,
-          (index) => Padding(
-            padding: const EdgeInsets.only(right: 8),
+          (index) => const Padding(
+            padding: EdgeInsets.only(right: AppSpacing.sm),
             child: SkeletonShimmer(width: 80, height: 36, borderRadius: 8),
           ),
         ),
@@ -75,11 +76,11 @@ class FilterChipList extends ConsumerWidget {
     return Row(
       children: [
         const Icon(Icons.error_outline, color: AppColors.error, size: 16),
-        const SizedBox(width: 8),
+        const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: Text(
             message,
-            style: const TextStyle(color: AppColors.error, fontSize: 12),
+            style: AppTypography.bodySmall.copyWith(color: AppColors.error),
             overflow: TextOverflow.ellipsis,
           ),
         ),
@@ -102,10 +103,10 @@ class FilterChipList extends ConsumerWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary : AppColors.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: AppRadius.smRadius,
           border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.border,
           ),
@@ -121,8 +122,7 @@ class FilterChipList extends ConsumerWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: 14,
+          style: AppTypography.labelLarge.copyWith(
             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
             color: isSelected ? Colors.white : AppColors.textSecondary,
           ),

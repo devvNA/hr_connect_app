@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 import 'package:hr_connect/core/utils/shimmering.dart';
 import 'package:hr_connect/features/employee/presentation/providers/employee_providers.dart';
 import 'package:hr_connect/features/employee/presentation/providers/employee_states.dart';
@@ -19,7 +20,7 @@ class EmployeeListScreen extends ConsumerWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           child: Column(
             children: [
               // Search Bar
@@ -27,11 +28,11 @@ class EmployeeListScreen extends ConsumerWidget {
                 onSearch: (query) =>
                     ref.read(employeeListProvider.notifier).search(query),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
 
               // Filter Chips
               const FilterChipList(),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
 
               // List Header
               Row(
@@ -39,8 +40,7 @@ class EmployeeListScreen extends ConsumerWidget {
                 children: [
                   Text(
                     'TOTAL EMPLOYEES ($employeeCount)',
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: AppTypography.labelSmall.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppColors.textSecondary,
                       letterSpacing: 0.5,
@@ -64,7 +64,12 @@ class EmployeeListScreen extends ConsumerWidget {
                       onRefresh: () =>
                           ref.read(employeeListProvider.notifier).refresh(),
                       child: ListView.builder(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
+                        padding: const EdgeInsets.fromLTRB(
+                          AppSpacing.lg,
+                          0,
+                          AppSpacing.lg,
+                          100,
+                        ),
                         itemCount: employees.length,
                         itemBuilder: (context, index) {
                           final employee = employees[index];
@@ -91,21 +96,21 @@ class EmployeeListScreen extends ConsumerWidget {
 
   Widget _buildLoadingList() {
     return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
+      padding: const EdgeInsets.fromLTRB(AppSpacing.lg, 0, AppSpacing.lg, 100),
       itemCount: 5,
       itemBuilder: (context, index) => Container(
-        padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        margin: const EdgeInsets.only(bottom: AppSpacing.md),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppRadius.mdRadius,
           border: Border.all(color: AppColors.border),
         ),
         child: Row(
           children: [
             // Avatar skeleton
             const SkeletonShimmer(width: 48, height: 48, borderRadius: 24),
-            const SizedBox(width: 16),
+            const SizedBox(width: AppSpacing.lg),
             // Text info skeleton
             Expanded(
               child: Column(
@@ -123,7 +128,7 @@ class EmployeeListScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: AppSpacing.lg),
             // Status skeleton
             const SkeletonShimmer(width: 60, height: 24, borderRadius: 12),
           ],
@@ -135,7 +140,7 @@ class EmployeeListScreen extends ConsumerWidget {
   Widget _buildError(String message, WidgetRef ref) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppSpacing.xxl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -144,25 +149,22 @@ class EmployeeListScreen extends ConsumerWidget {
               size: 64,
               color: AppColors.error.withValues(alpha: 0.7),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               'Failed to load employees',
-              style: TextStyle(
-                fontSize: 18,
+              style: AppTypography.headlineSmall.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
+              style: AppTypography.bodyMedium.copyWith(
                 color: AppColors.textSecondary,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xxl),
             ElevatedButton.icon(
               onPressed: () =>
                   ref.read(employeeListProvider.notifier).refresh(),
@@ -178,7 +180,7 @@ class EmployeeListScreen extends ConsumerWidget {
   Widget _buildEmptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppSpacing.xxl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -187,20 +189,20 @@ class EmployeeListScreen extends ConsumerWidget {
               size: 64,
               color: AppColors.textSecondary.withValues(alpha: 0.5),
             ),
-            const SizedBox(height: 16),
-            const Text(
+            const SizedBox(height: AppSpacing.lg),
+            Text(
               'No employees found',
-              style: TextStyle(
-                fontSize: 18,
+              style: AppTypography.headlineSmall.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
               ),
             ),
-            const SizedBox(height: 8),
-            const Text(
+            const SizedBox(height: AppSpacing.sm),
+            Text(
               'Try adjusting your search or filter criteria',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
             ),
           ],
         ),

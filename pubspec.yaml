@@ -43,6 +43,9 @@ dependencies:
   flutter_dotenv: ^6.0.0
   dartz: ^0.10.1
   equatable: ^2.0.8
+  flutter_map: ^8.2.2
+  geolocator: ^14.0.2
+  latlong2: ^0.9.1
 
 dev_dependencies:
   flutter_test:

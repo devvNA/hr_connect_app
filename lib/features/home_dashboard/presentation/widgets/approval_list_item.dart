@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 
 class ApprovalListItem extends StatelessWidget {
+  // ... (parameters remain same)
   final String name;
   final String timeAgo;
   final String title;
@@ -30,12 +32,12 @@ class ApprovalListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.mdRadius,
         border: Border.all(color: AppColors.border),
-        boxShadow: AppColors.shadowSoft, // Using simpler shadow for list items
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         children: [
@@ -57,7 +59,7 @@ class ApprovalListItem extends StatelessWidget {
                       return Center(
                         child: Text(
                           name.isNotEmpty ? name[0].toUpperCase() : '?',
-                          style: const TextStyle(
+                          style: AppTypography.labelLarge.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColors.textSecondary,
                           ),
@@ -67,7 +69,7 @@ class ApprovalListItem extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,18 +79,14 @@ class ApprovalListItem extends StatelessWidget {
                       children: [
                         Text(
                           name,
-                          style: const TextStyle(
+                          style: AppTypography.titleMedium.copyWith(
                             fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: AppColors.textPrimary,
                           ),
                         ),
                         Text(
                           timeAgo,
-                          style: const TextStyle(
-                            fontSize: 10,
+                          style: AppTypography.labelSmall.copyWith(
                             color: AppColors.textLight,
-                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
@@ -96,28 +94,23 @@ class ApprovalListItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       title,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.textSecondary,
-                      ),
+                      style: AppTypography.bodySmall,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacing.sm),
                     Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(AppSpacing.sm),
                       decoration: BoxDecoration(
                         color: AppColors.background,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: AppRadius.smRadius,
                       ),
                       child: Row(
                         children: [
                           Icon(icon, size: 16, color: AppColors.textSecondary),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: AppSpacing.sm),
                           Expanded(
                             child: Text(
                               attachmentName ?? details,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
+                              style: AppTypography.labelMedium.copyWith(
                                 color: AppColors.textSecondary,
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -126,10 +119,8 @@ class ApprovalListItem extends StatelessWidget {
                           if (amount != null)
                             Text(
                               amount!,
-                              style: const TextStyle(
-                                fontSize: 14,
+                              style: AppTypography.labelLarge.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimary,
                               ),
                             ),
                         ],
@@ -140,43 +131,42 @@ class ApprovalListItem extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
           Row(
             children: [
               Expanded(
                 child: OutlinedButton(
                   onPressed: onReject,
                   style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
                     side: const BorderSide(color: AppColors.divider),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: AppRadius.smRadius,
                     ),
                     foregroundColor: AppColors.textSecondary,
                   ),
-                  child: const Text(
+                  child: Text(
                     'Reject',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: ElevatedButton(
                   onPressed: onApprove,
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
                     backgroundColor: AppColors.primary,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: AppRadius.smRadius,
                     ),
                     shadowColor: AppColors.primary.withValues(alpha: 0.3),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Approve',
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: AppTypography.labelMedium.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),

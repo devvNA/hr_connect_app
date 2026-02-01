@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide NavigationDestination;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 import 'package:hr_connect/features/auth/domain/entities/employee_entity.dart';
 import 'package:hr_connect/features/base/presentation/providers/navigation_provider.dart';
 
@@ -33,7 +34,10 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.md,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -48,7 +52,7 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacing.md),
                   // HR Logo - only show on dashboard
                   if (isDashboard) ...[
                     Container(
@@ -56,29 +60,25 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
                       height: 32,
                       decoration: BoxDecoration(
                         color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: AppRadius.smRadius,
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
                           'HR',
-                          style: TextStyle(
+                          style: AppTypography.labelMedium.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: AppSpacing.sm),
                   ],
                   // Title
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontFamily: 'Manrope',
-                      fontSize: 18,
+                    style: AppTypography.headlineSmall.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
                       letterSpacing: -0.5,
                     ),
                   ),
@@ -94,7 +94,7 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
                           color: AppColors.textSecondary,
                         ),
                         onPressed: onNotificationPressed,
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(AppSpacing.sm),
                         constraints: const BoxConstraints(),
                       ),
                       Positioned(
