@@ -46,7 +46,7 @@ class DashboardContent extends ConsumerWidget {
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  'Good Morning,\n${employee.fullName.split(' ').map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1).toLowerCase() : '').join(' ')}',
+                  'Good Morning,\n${employee.fullName}',
                   style: AppTypography.displaySmall.copyWith(
                     height: 1.2,
                     letterSpacing: -0.5,
@@ -63,7 +63,9 @@ class DashboardContent extends ConsumerWidget {
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Search employees, actions...',
-                      hintStyle: AppTypography.bodyMedium.copyWith(color: AppColors.textLight),
+                      hintStyle: AppTypography.bodyMedium.copyWith(
+                        color: AppColors.textLight,
+                      ),
                       prefixIcon: const Icon(
                         Icons.search,
                         color: AppColors.textLight,
@@ -179,10 +181,7 @@ class DashboardContent extends ConsumerWidget {
                                     size: 20,
                                   ),
                                 ),
-                                Text(
-                                  '4',
-                                  style: AppTypography.displaySmall,
-                                ),
+                                Text('4', style: AppTypography.displaySmall),
                               ],
                             ),
                             const Spacer(),
@@ -226,9 +225,10 @@ class DashboardContent extends ConsumerWidget {
                                       child: Center(
                                         child: Text(
                                           '+1',
-                                          style: AppTypography.labelSmall.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                          style: AppTypography.labelSmall
+                                              .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                       ),
                                     ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
 import 'package:hr_connect/core/theme/app_theme.dart';
-import 'package:intl/intl.dart';
+import 'package:hr_connect/core/utils/date_formatter.dart';
 
 class CheckInCard extends StatelessWidget {
   final Widget? mapWidget;
@@ -22,8 +22,7 @@ class CheckInCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    final timeStr = DateFormat('hh:mm').format(now);
-    final amPm = DateFormat('a').format(now);
+    final timeStr = DateFormatter.formatTime(now);
 
     return Container(
       decoration: BoxDecoration(
@@ -34,7 +33,6 @@ class CheckInCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // ... (decorative background logic)
           Padding(
             padding: const EdgeInsets.all(AppSpacing.xxl),
             child: Column(
@@ -55,7 +53,7 @@ class CheckInCard extends StatelessWidget {
                             ),
                             const SizedBox(width: AppSpacing.sm),
                             Text(
-                              'SHIFT: 09:00 - 18:00',
+                              'SHIFT: 08:30 - 17:00',
                               style: AppTypography.titleSmall.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primary,
@@ -76,7 +74,7 @@ class CheckInCard extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: ' $amPm',
+                                text: ' WIB',
                                 style: AppTypography.headlineSmall.copyWith(
                                   color: AppColors.textSecondary,
                                   fontWeight: FontWeight.w500,
@@ -86,10 +84,7 @@ class CheckInCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: AppSpacing.xs),
-                        Text(
-                          'San Francisco HQ • Office Network',
-                          style: AppTypography.bodySmall,
-                        ),
+                        Text('Office Network', style: AppTypography.bodySmall),
                       ],
                     ),
                     // Mini Map Container

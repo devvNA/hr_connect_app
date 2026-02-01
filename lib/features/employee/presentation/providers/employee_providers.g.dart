@@ -151,7 +151,7 @@ final class DepartmentListNotifierProvider
 }
 
 String _$departmentListNotifierHash() =>
-    r'6c9ea27c74d78b3ad081c318393d5e9ec3e99d7e';
+    r'9fd2a5fc9f0b8587e7bf8df693e5bec0c4c5f240';
 
 /// Department list notifier for filter chips
 
@@ -210,7 +210,7 @@ final class EmployeeListNotifierProvider
 }
 
 String _$employeeListNotifierHash() =>
-    r'ccf3ff1cad69ff466c37554567536718e557d6a3';
+    r'b15530605babe6740cfcc8b7b50664e350079fb4';
 
 /// Employee list notifier
 
@@ -282,7 +282,7 @@ final class DepartmentsDataProvider
   }
 }
 
-String _$departmentsDataHash() => r'9d694917bacec5db8292e0511be3dc87e1739a4e';
+String _$departmentsDataHash() => r'8a7525b3d768f8d2f428ec67a89e000550118426';
 
 /// Helper provider: selected department ID
 
@@ -329,7 +329,7 @@ final class CurrentDepartmentIdProvider
 }
 
 String _$currentDepartmentIdHash() =>
-    r'f2aa9466fce8af438a1190908a21a1544121788b';
+    r'c98419185b3ee8a2547182711107b95692e15180';
 
 /// Helper provider: employees as list
 
@@ -381,7 +381,7 @@ final class EmployeesDataProvider
   }
 }
 
-String _$employeesDataHash() => r'6919951efe7dfac059df8c6420d958bf54f7a22a';
+String _$employeesDataHash() => r'f9393e0b31d47bb1d7830f6f98a4acaa45725bfa';
 
 /// Helper provider: employee count
 

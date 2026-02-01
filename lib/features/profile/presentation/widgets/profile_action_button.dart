@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 
 class ProfileActionButton extends StatelessWidget {
   final IconData icon;
@@ -17,7 +18,7 @@ class ProfileActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: AppRadius.mdRadius,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -26,16 +27,15 @@ class ProfileActionButton extends StatelessWidget {
             height: 48,
             decoration: BoxDecoration(
               color: AppColors.primaryContainer,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: AppColors.shadowSoft,
+              borderRadius: AppRadius.mdRadius,
+              boxShadow: AppShadows.small,
             ),
             child: Icon(icon, color: AppColors.primary, size: 24),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
+            style: AppTypography.labelMedium.copyWith(
               fontWeight: FontWeight.w500,
               color: AppColors.textSecondary,
             ),

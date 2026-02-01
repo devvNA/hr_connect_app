@@ -77,8 +77,9 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
                   // Title
                   Text(
                     title,
-                    style: AppTypography.headlineSmall.copyWith(
+                    style: AppTypography.displaySmall.copyWith(
                       fontWeight: FontWeight.bold,
+                      fontSize: 18,
                       letterSpacing: -0.5,
                     ),
                   ),

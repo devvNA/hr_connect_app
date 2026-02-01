@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 import 'package:hr_connect/features/auth/domain/entities/employee_entity.dart';
 import 'package:hr_connect/features/profile/presentation/widgets/activity_timeline_item.dart';
 import 'package:hr_connect/features/profile/presentation/widgets/document_item.dart';
@@ -33,17 +34,16 @@ class ProfileContent extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: AppColors.primary.withValues(alpha: 0.1),
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.admin_panel_settings, size: 16, color: AppColors.primary),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacing.sm),
           Text(
             'HR ADMIN VIEW • FULL ACCESS',
-            style: TextStyle(
+            style: AppTypography.labelSmall.copyWith(
               color: AppColors.primary,
-              fontSize: 12,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.0,
             ),
@@ -55,22 +55,16 @@ class ProfileContent extends StatelessWidget {
 
   Widget _buildProfileHeader(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(24),
-          bottomRight: Radius.circular(24),
+          bottomLeft: Radius.circular(AppRadius.xxl),
+          bottomRight: Radius.circular(AppRadius.xxl),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, 0.05),
-            offset: Offset(0, 2),
-            blurRadius: 10,
-          ),
-        ],
+        boxShadow: AppShadows.small,
       ),
-      padding: const EdgeInsets.fromLTRB(16, 32, 16, 24),
-      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.xxxl, AppSpacing.lg, AppSpacing.xxl),
+      margin: const EdgeInsets.only(bottom: AppSpacing.xxl),
       child: Column(
         children: [
           Stack(
@@ -81,7 +75,7 @@ class ProfileContent extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 4),
-                  boxShadow: AppColors.shadowCard,
+                  boxShadow: AppShadows.card,
                   color: AppColors.background,
                 ),
                 child: ClipOval(
@@ -94,8 +88,7 @@ class ProfileContent extends StatelessWidget {
                           employee.fullName.isNotEmpty
                               ? employee.fullName[0].toUpperCase()
                               : '?',
-                          style: const TextStyle(
-                            fontSize: 32,
+                          style: AppTypography.displayLarge.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColors.textSecondary,
                           ),
@@ -120,38 +113,33 @@ class ProfileContent extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
           Text(
             employee.fullName,
-            style: const TextStyle(
-              fontSize: 24,
+            style: AppTypography.displaySmall.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             employee.jobTitle ?? 'Employee',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+            style: AppTypography.labelLarge.copyWith(
               color: AppColors.textSecondary,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.md),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.xs),
             decoration: BoxDecoration(
               color: AppColors.successContainer,
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: AppRadius.fullRadius,
             ),
-            child: const Text(
+            child: Text(
               'ACTIVE EMPLOYEE',
-              style: TextStyle(
+              style: AppTypography.labelSmall.copyWith(
                 color: AppColors.success,
-                fontSize: 12,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 0.5,
               ),
@@ -164,7 +152,7 @@ class ProfileContent extends StatelessWidget {
 
   Widget _buildActionButtons() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -187,7 +175,7 @@ class ProfileContent extends StatelessWidget {
 
   Widget _buildContent(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         children: [
           // Personal Info
@@ -197,9 +185,8 @@ class ProfileContent extends StatelessWidget {
               onTap: () {},
               child: Text(
                 'EDIT',
-                style: TextStyle(
+                style: AppTypography.labelMedium.copyWith(
                   color: AppColors.primary,
-                  fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -227,7 +214,7 @@ class ProfileContent extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
 
           // Job Details
           ProfileInfoSection(
@@ -242,7 +229,7 @@ class ProfileContent extends StatelessWidget {
                       'Product Design',
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacing.md),
                   Expanded(
                     child: _buildJobDetailBox(
                       context,
@@ -252,33 +239,30 @@ class ProfileContent extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacing.md),
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(AppSpacing.md),
                 decoration: BoxDecoration(
                   color: AppColors.background,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: AppRadius.smRadius,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           'Reporting to',
-                          style: TextStyle(
-                            fontSize: 12,
+                          style: AppTypography.bodySmall.copyWith(
                             color: AppColors.textSecondary,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           'Robert Fox',
-                          style: TextStyle(
-                            fontSize: 14,
+                          style: AppTypography.labelLarge.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
                           ),
                         ),
                       ],
@@ -294,7 +278,7 @@ class ProfileContent extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
 
           // Documents
           ProfileInfoSection(
@@ -303,9 +287,8 @@ class ProfileContent extends StatelessWidget {
               onTap: () {},
               child: Text(
                 'VIEW ALL',
-                style: TextStyle(
+                style: AppTypography.labelMedium.copyWith(
                   color: AppColors.primary,
-                  fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -319,7 +302,7 @@ class ProfileContent extends StatelessWidget {
                 subtitle: 'Added on Aug 1, 2023 • 2.4 MB',
                 onDownload: () {},
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.sm),
               DocumentItem(
                 icon: Icons.image,
                 iconColor: AppColors.primary,
@@ -330,7 +313,7 @@ class ProfileContent extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
 
           // Activity Timeline
           ProfileInfoSection(
@@ -362,28 +345,25 @@ class ProfileContent extends StatelessWidget {
 
   Widget _buildJobDetailBox(BuildContext context, String label, String value) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.background,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppRadius.smRadius,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
+            style: AppTypography.bodySmall.copyWith(
               color: AppColors.textSecondary,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 14,
+            style: AppTypography.labelLarge.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

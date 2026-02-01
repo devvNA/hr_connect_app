@@ -28,7 +28,7 @@ class MyApp extends ConsumerWidget {
           return Banner(
             message: config.flavor.name.toUpperCase(),
             location: BannerLocation.topStart,
-            color: config.isDevelopment ? Colors.green : Colors.orange,
+            color: config.isDevelopment ? Colors.orange : Colors.green,
             child: child!,
           );
         }

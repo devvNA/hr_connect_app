@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
+import 'package:hr_connect/core/theme/app_theme.dart';
 
 class ProfileInfoSection extends StatelessWidget {
   final String title;
@@ -16,11 +17,11 @@ class ProfileInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: AppColors.shadowCard,
+        borderRadius: AppRadius.lgRadius,
+        boxShadow: AppShadows.card,
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
@@ -31,17 +32,16 @@ class ProfileInfoSection extends StatelessWidget {
             children: [
               Text(
                 title.toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 12,
+                style: AppTypography.labelSmall.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.textSecondary,
                   letterSpacing: 1.2,
                 ),
               ),
-              ?action,
+              if (action != null) action!,
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
           ...children,
         ],
       ),

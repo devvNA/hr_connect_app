@@ -4,17 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
 import 'package:hr_connect/core/theme/app_theme.dart';
+import 'package:hr_connect/core/utils/date_formatter.dart';
+import 'package:hr_connect/features/attendance/presentation/providers/attendance_providers.dart';
+import 'package:hr_connect/features/attendance/presentation/providers/attendance_states.dart';
 import 'package:hr_connect/features/attendance/presentation/widgets/activity_history_list.dart';
 import 'package:hr_connect/features/attendance/presentation/widgets/attendance_metrics.dart';
 import 'package:hr_connect/features/attendance/presentation/widgets/calendar_strip.dart';
 import 'package:hr_connect/features/attendance/presentation/widgets/check_in_card.dart';
-import 'package:intl/intl.dart';
+import 'package:hr_connect/features/auth/presentation/providers/auth_providers.dart';
+import 'package:hr_connect/features/auth/presentation/providers/auth_states.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../domain/entities/attendance.dart';
 import '../../domain/usecases/check_in.dart'; // For constants
-import '../providers/attendance_controller.dart';
 
 class AttendanceScreen extends ConsumerStatefulWidget {
   const AttendanceScreen({super.key});
@@ -83,26 +86,32 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final todayState = ref.watch(todayAttendanceProvider);
-    final historyState = ref.watch(monthlyAttendanceProvider(DateTime.now()));
-    final controllerState = ref.watch(attendanceControllerProvider);
+    final attendanceState = ref.watch(attendanceProvider);
+    final authState = ref.watch(authProvider);
+
+    final userName = switch (authState) {
+      AuthLoaded(:final employee) => employee.fullName,
+      _ => 'Employee',
+    };
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: RefreshIndicator(
         onRefresh: () async {
           _getCurrentLocation();
-          ref.invalidate(todayAttendanceProvider);
-          ref.invalidate(monthlyAttendanceProvider);
+          ref.read(attendanceProvider.notifier).refresh();
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(AppSpacing.xl),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Greeting
-              Text('Good Morning, Alex.', style: AppTypography.displaySmall),
+              Text(
+                'Good Morning, $userName.',
+                style: AppTypography.displaySmall,
+              ),
               const SizedBox(height: AppSpacing.xs),
               Text(
                 'Ready for another productive day?',
@@ -117,75 +126,8 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
               const CalendarStrip(),
               const SizedBox(height: AppSpacing.xxl),
 
-              // Check In/Out Card
-              todayState.when(
-                data: (attendance) {
-                  final isCheckedIn =
-                      attendance != null && attendance.checkOut == null;
-                  return CheckInCard(
-                    isLoading: controllerState.isLoading || _isLoadingLocation,
-                    isCheckedIn: isCheckedIn,
-                    checkInTime: attendance?.checkIn,
-                    mapWidget: (_currentLocation != null && !_isLoadingLocation)
-                        ? FlutterMap(
-                            mapController: _mapController,
-                            options: MapOptions(
-                              initialCenter: _currentLocation!,
-                              initialZoom: 15,
-                              interactionOptions: const InteractionOptions(
-                                flags: InteractiveFlag.none, // Static map
-                              ),
-                            ),
-                            children: [
-                              TileLayer(
-                                urlTemplate:
-                                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                userAgentPackageName: 'com.example.hr_connect',
-                              ),
-                              MarkerLayer(
-                                markers: [
-                                  Marker(
-                                    point: _currentLocation!,
-                                    width: 24,
-                                    height: 24,
-                                    child: const Icon(
-                                      Icons.person_pin_circle,
-                                      color: AppColors.primary,
-                                      size: 24,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )
-                        : null,
-                    onCheckIn: () {
-                      if (_currentLocation == null) return;
-
-                      if (!isCheckedIn) {
-                        ref
-                            .read(attendanceControllerProvider.notifier)
-                            .checkIn(
-                              employeeId:
-                                  Supabase.instance.client.auth.currentUser!.id,
-                              locationType: LocationType.wfo,
-                              lat: _currentLocation!.latitude,
-                              long: _currentLocation!.longitude,
-                            );
-                      } else {
-                        ref
-                            .read(attendanceControllerProvider.notifier)
-                            .checkOut(attendance.id);
-                      }
-                    },
-                  );
-                },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, stack) => Text(
-                  'Error: $err',
-                  style: const TextStyle(color: Colors.red),
-                ),
-              ),
+              // Check In/Out Card - using switch pattern for sealed class
+              _buildCheckInCard(attendanceState),
               const SizedBox(height: 24),
 
               // Metrics
@@ -195,11 +137,12 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
               // History
               const ActivityHistoryList(),
 
-              if (controllerState.hasError)
+              // Error display
+              if (attendanceState is AttendanceError)
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: Text(
-                    controllerState.error.toString(),
+                    attendanceState.message,
                     style: const TextStyle(color: Colors.red),
                     textAlign: TextAlign.center,
                   ),
@@ -213,12 +156,93 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
     );
   }
 
+  Widget _buildCheckInCard(AttendanceState state) {
+    return switch (state) {
+      AttendanceLoading() => const Center(child: CircularProgressIndicator()),
+      AttendanceLoaded(:final todayAttendance) => _buildCheckInCardContent(
+        todayAttendance,
+      ),
+      AttendanceError(:final message) => Center(
+        child: Column(
+          children: [
+            Text('Error: $message', style: const TextStyle(color: Colors.red)),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () => ref.read(attendanceProvider.notifier).refresh(),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      ),
+      _ => const SizedBox.shrink(),
+    };
+  }
+
+  Widget _buildCheckInCardContent(Attendance? attendance) {
+    final isCheckedIn = attendance != null && attendance.checkOut == null;
+    final isLoading = _isLoadingLocation;
+
+    return CheckInCard(
+      isLoading: isLoading,
+      isCheckedIn: isCheckedIn,
+      checkInTime: attendance?.checkIn,
+      mapWidget: (_currentLocation != null && !_isLoadingLocation)
+          ? FlutterMap(
+              mapController: _mapController,
+              options: MapOptions(
+                initialCenter: _currentLocation!,
+                initialZoom: 15,
+                interactionOptions: const InteractionOptions(
+                  flags: InteractiveFlag.none, // Static map
+                ),
+              ),
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.example.hr_connect',
+                ),
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: _currentLocation!,
+                      width: 24,
+                      height: 24,
+                      child: const Icon(
+                        Icons.person_pin_circle,
+                        color: AppColors.primary,
+                        size: 24,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            )
+          : null,
+      onCheckIn: () {
+        if (_currentLocation == null) return;
+
+        if (!isCheckedIn) {
+          ref
+              .read(attendanceProvider.notifier)
+              .checkIn(
+                employeeId: Supabase.instance.client.auth.currentUser!.id,
+                locationType: LocationType.wfo,
+                lat: _currentLocation!.latitude,
+                long: _currentLocation!.longitude,
+              );
+        } else {
+          ref.read(attendanceProvider.notifier).checkOut(attendance.id);
+        }
+      },
+    );
+  }
+
   Widget _buildInfoColumn(String label, DateTime time) {
     return Column(
       children: [
         Text(label, style: const TextStyle(color: Colors.grey)),
         Text(
-          DateFormat('HH:mm').format(time),
+          DateFormatter.formatTime(time),
           style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ],
