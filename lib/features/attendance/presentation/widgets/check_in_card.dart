@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
 import 'package:hr_connect/core/theme/app_theme.dart';
 import 'package:hr_connect/core/utils/date_formatter.dart';
+import 'package:hr_connect/core/utils/shimmering.dart';
 
 class CheckInCard extends StatelessWidget {
   final Widget? mapWidget;
@@ -114,35 +115,30 @@ class CheckInCard extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.xxl),
                 // Action Button
-                InkWell(
-                  onTap: isLoading ? null : onCheckIn,
-                  borderRadius: AppRadius.mdRadius,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: AppSpacing.lg,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isCheckedIn
-                          ? AppColors.warning
-                          : AppColors.primary,
-                      borderRadius: AppRadius.mdRadius,
-                      boxShadow: isCheckedIn
-                          ? AppShadows.medium
-                          : AppShadows.primary,
-                    ),
-                    child: isLoading
-                        ? const Center(
-                            child: SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
-                            ),
-                          )
-                        : Row(
+                isLoading
+                    ? const SkeletonShimmer(
+                        width: double.infinity,
+                        height: 56,
+                        borderRadius: 12,
+                      )
+                    : InkWell(
+                        onTap: onCheckIn,
+                        borderRadius: AppRadius.mdRadius,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: AppSpacing.lg,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isCheckedIn
+                                ? AppColors.warning
+                                : AppColors.primary,
+                            borderRadius: AppRadius.mdRadius,
+                            boxShadow: isCheckedIn
+                                ? AppShadows.medium
+                                : AppShadows.primary,
+                          ),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
@@ -157,12 +153,79 @@ class CheckInCard extends StatelessWidget {
                               ),
                             ],
                           ),
-                  ),
-                ),
+                        ),
+                      ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CheckInCardShimmer extends StatelessWidget {
+  const CheckInCardShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadius.lgRadius,
+        boxShadow: AppShadows.card,
+        border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Shift info shimmer
+                    const SkeletonShimmer(
+                      width: 150,
+                      height: 20,
+                      borderRadius: 4,
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    // Time shimmer
+                    const SkeletonShimmer(
+                      width: 180,
+                      height: 48,
+                      borderRadius: 8,
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    // Network text shimmer
+                    const SkeletonShimmer(
+                      width: 100,
+                      height: 14,
+                      borderRadius: 4,
+                    ),
+                  ],
+                ),
+                // Mini Map shimmer
+                const SkeletonShimmer(
+                  width: 48,
+                  height: 48,
+                  borderRadius: 12, // AppRadius.mdRadius
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.xxl),
+            // Button shimmer
+            const SkeletonShimmer(
+              width: double.infinity,
+              height: 56, // Approx height of button
+              borderRadius: 12, // AppRadius.mdRadius
+            ),
+          ],
+        ),
       ),
     );
   }

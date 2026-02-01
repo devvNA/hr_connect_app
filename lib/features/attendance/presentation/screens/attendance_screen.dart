@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
 import 'package:hr_connect/core/theme/app_theme.dart';
 import 'package:hr_connect/core/utils/date_formatter.dart';
+import 'package:hr_connect/core/utils/shimmering.dart';
 import 'package:hr_connect/features/attendance/presentation/providers/attendance_providers.dart';
 import 'package:hr_connect/features/attendance/presentation/providers/attendance_states.dart';
 import 'package:hr_connect/features/attendance/presentation/widgets/activity_history_list.dart';
@@ -158,7 +159,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
 
   Widget _buildCheckInCard(AttendanceState state) {
     return switch (state) {
-      AttendanceLoading() => const Center(child: CircularProgressIndicator()),
+      AttendanceLoading() => const CheckInCardShimmer(),
       AttendanceLoaded(:final todayAttendance) => _buildCheckInCardContent(
         todayAttendance,
       ),
@@ -217,7 +218,9 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
                 ),
               ],
             )
-          : null,
+          : (_isLoadingLocation
+                ? const SkeletonShimmer(width: 48, height: 48, borderRadius: 12)
+                : null),
       onCheckIn: () {
         if (_currentLocation == null) return;
 
@@ -262,16 +265,5 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen> {
       default:
         return Colors.grey.shade100;
     }
-  }
-}
-
-class DataLoader extends StatelessWidget {
-  const DataLoader({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(8.0),
-      child: CircularProgressIndicator(),
-    );
   }
 }
