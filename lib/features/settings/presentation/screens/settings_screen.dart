@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
 import 'package:hr_connect/features/settings/presentation/widgets/logout_button.dart';
 import 'package:hr_connect/features/settings/presentation/widgets/settings_section.dart';
@@ -31,7 +32,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SettingsTile(
                 icon: Icons.person,
                 title: 'Edit Profile',
-                onTap: () {},
+                onTap: () {
+                  context.go('/profile');
+                },
               ),
               SettingsTile(
                 icon: Icons.lock,

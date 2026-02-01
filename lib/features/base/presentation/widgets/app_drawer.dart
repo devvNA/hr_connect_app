@@ -184,16 +184,17 @@ class AppDrawer extends ConsumerWidget {
                         currentDestination ==
                         NavigationDestination.leaveRequests,
                   ),
-                  _buildMenuItem(
-                    context: context,
-                    ref: ref,
-                    icon: Icons.check_circle_outline,
-                    label: 'Approvals',
-                    destination: NavigationDestination.approvals,
-                    badgeCount: 3,
-                    isActive:
-                        currentDestination == NavigationDestination.approvals,
-                  ),
+                  if (employee.isAdmin)
+                    _buildMenuItem(
+                      context: context,
+                      ref: ref,
+                      icon: Icons.check_circle_outline,
+                      label: 'Approvals',
+                      destination: NavigationDestination.approvals,
+                      badgeCount: 3,
+                      isActive:
+                          currentDestination == NavigationDestination.approvals,
+                    ),
                   _buildMenuItem(
                     context: context,
                     ref: ref,

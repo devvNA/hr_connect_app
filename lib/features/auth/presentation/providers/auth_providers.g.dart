@@ -55,7 +55,7 @@ final class AuthRemoteDataSourceProvider
 }
 
 String _$authRemoteDataSourceHash() =>
-    r'ba15c585cb26625d61a7571c6f6150871656efcb';
+    r'1128e4d65e56199a4258879fb1bd220d7a1106f3';
 
 /// Get current employee use case provider
 
@@ -322,7 +322,7 @@ final class AuthNotifierProvider
   }
 }
 
-String _$authNotifierHash() => r'0cde7ba797a2f4459351492b5c69498fa707dffa';
+String _$authNotifierHash() => r'f5a0a49ecbec1cb1de6138456e0cf3af4a3f3288';
 
 abstract class _$AuthNotifier extends $Notifier<AuthState> {
   AuthState build();

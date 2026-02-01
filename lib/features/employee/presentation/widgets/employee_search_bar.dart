@@ -1,8 +1,40 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
 
-class EmployeeSearchBar extends StatelessWidget {
-  const EmployeeSearchBar({super.key});
+class EmployeeSearchBar extends StatefulWidget {
+  final ValueChanged<String>? onSearch;
+
+  const EmployeeSearchBar({super.key, this.onSearch});
+
+  @override
+  State<EmployeeSearchBar> createState() => _EmployeeSearchBarState();
+}
+
+class _EmployeeSearchBarState extends State<EmployeeSearchBar> {
+  final TextEditingController _controller = TextEditingController();
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String query) {
+    // Debounce search to avoid too many API calls
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      widget.onSearch?.call(query);
+    });
+  }
+
+  void _clearSearch() {
+    _controller.clear();
+    widget.onSearch?.call('');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +46,33 @@ class EmployeeSearchBar extends StatelessWidget {
         boxShadow: AppColors.shadowSoft,
       ),
       child: TextField(
+        controller: _controller,
+        onChanged: _onSearchChanged,
         decoration: InputDecoration(
           hintText: 'Search name, role, or ID...',
           hintStyle: const TextStyle(color: AppColors.textLight),
           prefixIcon: const Icon(Icons.search, color: AppColors.textLight),
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.tune, color: AppColors.textLight, size: 20),
-            onPressed: () {},
+          suffixIcon: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (_controller.text.isNotEmpty)
+                IconButton(
+                  icon: const Icon(
+                    Icons.clear,
+                    color: AppColors.textLight,
+                    size: 20,
+                  ),
+                  onPressed: _clearSearch,
+                ),
+              IconButton(
+                icon: const Icon(
+                  Icons.tune,
+                  color: AppColors.textLight,
+                  size: 20,
+                ),
+                onPressed: () {},
+              ),
+            ],
           ),
           border: InputBorder.none,
           enabledBorder: InputBorder.none,

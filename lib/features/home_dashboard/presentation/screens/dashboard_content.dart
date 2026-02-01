@@ -260,62 +260,63 @@ class DashboardContent extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
-          // Pending Approvals
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Pending Approvals',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        'View all',
+          // Pending Approvals - Only visible for Admin role
+          if (employee.isAdmin)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Pending Approvals',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
+                          color: AppColors.textPrimary,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                ApprovalListItem(
-                  name: 'Sarah Jenkins',
-                  timeAgo: '2h ago',
-                  title: 'Annual Leave Request',
-                  details: 'Oct 12 - Oct 15 • 3 Days',
-                  icon: Icons.calendar_month,
-                  onApprove: () {},
-                  onReject: () {},
-                  avatarUrl: 'https://i.pravatar.cc/100?img=1',
-                ),
-                const SizedBox(height: 12),
-                ApprovalListItem(
-                  name: 'Mike Ross',
-                  timeAgo: '5h ago',
-                  title: 'Expense Claim • Travel',
-                  details: 'taxi_receipt.pdf',
-                  attachmentName: 'taxi_receipt.pdf',
-                  amount: '\$45.00',
-                  icon: Icons.attach_file,
-                  onApprove: () {},
-                  onReject: () {},
-                  avatarUrl: 'https://i.pravatar.cc/100?img=11',
-                ),
-              ],
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'View all',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  ApprovalListItem(
+                    name: 'Sarah Jenkins',
+                    timeAgo: '2h ago',
+                    title: 'Annual Leave Request',
+                    details: 'Oct 12 - Oct 15 • 3 Days',
+                    icon: Icons.calendar_month,
+                    onApprove: () {},
+                    onReject: () {},
+                    avatarUrl: 'https://i.pravatar.cc/100?img=1',
+                  ),
+                  const SizedBox(height: 12),
+                  ApprovalListItem(
+                    name: 'Mike Ross',
+                    timeAgo: '5h ago',
+                    title: 'Expense Claim • Travel',
+                    details: 'taxi_receipt.pdf',
+                    attachmentName: 'taxi_receipt.pdf',
+                    amount: '\$45.00',
+                    icon: Icons.attach_file,
+                    onApprove: () {},
+                    onReject: () {},
+                    avatarUrl: 'https://i.pravatar.cc/100?img=11',
+                  ),
+                ],
+              ),
             ),
-          ),
 
           // Bottom Spacer
           const SizedBox(height: 100),

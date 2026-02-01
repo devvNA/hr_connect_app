@@ -91,7 +91,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         email: email,
         phone: phone,
         jobTitle: jobTitle,
-        status: EmployeeStatus.probation,
+        status: EmployeeStatus.active,
         joinDate: now,
         role: EmployeeRole.employee,
         createdAt: now,
