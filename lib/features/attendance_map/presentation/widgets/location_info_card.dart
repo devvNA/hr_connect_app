@@ -5,12 +5,14 @@ import 'package:hr_connect/core/theme/app_theme.dart';
 class LocationInfoCard extends StatelessWidget {
   final bool isWithinRadius;
   final double? distanceToOffice;
+  final String officeName;
   final VoidCallback? onNavigate;
 
   const LocationInfoCard({
     super.key,
     required this.isWithinRadius,
     this.distanceToOffice,
+    this.officeName = 'Office',
     this.onNavigate,
   });
 
@@ -41,7 +43,7 @@ class LocationInfoCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'HR Connect HQ',
+                      officeName,
                       style: AppTypography.headlineSmall.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -78,43 +80,7 @@ class LocationInfoCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.lg),
-
-          // Accuracy & GPS signal row
-          Row(
-            children: [
-              Text(
-                'Accuracy: ',
-                style: AppTypography.bodySmall.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              Text(
-                '~5 meters',
-                style: AppTypography.bodySmall.copyWith(
-                  color: AppColors.textPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const Spacer(),
-              Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  color: AppColors.success,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.xs),
-              Text(
-                'GPS Signal Strong',
-                style: AppTypography.bodySmall.copyWith(
-                  color: AppColors.success,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
+          const SizedBox(height: AppSpacing.sm),
         ],
       ),
     );

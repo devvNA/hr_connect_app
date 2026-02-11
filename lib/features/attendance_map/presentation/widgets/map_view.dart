@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
 import 'package:hr_connect/core/theme/app_theme.dart';
-import 'package:hr_connect/features/attendance/domain/usecases/check_in.dart';
+import 'package:hr_connect/features/attendance_map/domain/entities/attendance_map_entity.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,6 +10,7 @@ class AttendanceMapView extends StatelessWidget {
   final MapController mapController;
   final LatLng? currentLocation;
   final bool isWithinRadius;
+  final AttendanceMapEntity office;
   final VoidCallback? onMapReady;
 
   const AttendanceMapView({
@@ -17,20 +18,18 @@ class AttendanceMapView extends StatelessWidget {
     required this.mapController,
     this.currentLocation,
     required this.isWithinRadius,
+    required this.office,
     this.onMapReady,
   });
 
-  static final LatLng _officeLocation = LatLng(
-    CheckIn.officeLat,
-    CheckIn.officeLong,
-  );
-
   @override
   Widget build(BuildContext context) {
+    final officeLatLng = LatLng(office.latitude, office.longitude);
+
     return FlutterMap(
       mapController: mapController,
       options: MapOptions(
-        initialCenter: _officeLocation,
+        initialCenter: officeLatLng,
         initialZoom: 16,
         maxZoom: 19,
         onMapReady: onMapReady,
@@ -42,12 +41,11 @@ class AttendanceMapView extends StatelessWidget {
           maxNativeZoom: 19,
           retinaMode: RetinaMode.isHighDensity(context),
         ),
-        // Office radius circle
         CircleLayer(
           circles: [
             CircleMarker(
-              point: _officeLocation,
-              radius: CheckIn.maxDistanceInMeters,
+              point: officeLatLng,
+              radius: office.radiusMeters,
               useRadiusInMeter: true,
               color: AppColors.primary.withValues(alpha: 0.06),
               borderColor: AppColors.primary.withValues(alpha: 0.25),
@@ -55,12 +53,10 @@ class AttendanceMapView extends StatelessWidget {
             ),
           ],
         ),
-        // Markers with labels
         MarkerLayer(
           markers: [
-            // Office marker: icon pinned to coordinate center, label below
             Marker(
-              point: _officeLocation,
+              point: officeLatLng,
               width: 120,
               height: 56,
               alignment: Alignment.center,
@@ -84,11 +80,12 @@ class AttendanceMapView extends StatelessWidget {
                       boxShadow: AppShadows.small,
                     ),
                     child: Text(
-                      'HQ Office',
+                      office.name,
                       style: AppTypography.labelSmall.copyWith(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

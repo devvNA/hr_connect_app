@@ -10,18 +10,15 @@ class CheckIn {
 
   CheckIn(this.repository);
 
-  // Example: Office Location (Monas, Jakarta)
-  static const double officeLat = -6.175258;
-  static const double officeLong = 106.827008;
-  static const double maxDistanceInMeters = 120;
-
   Future<Either<Failure, Attendance>> call({
     required String employeeId,
     required LocationType locationType,
     required double lat,
     required double long,
+    required double officeLat,
+    required double officeLong,
+    required double maxDistanceMeters,
   }) async {
-    // 1. Validate Location if WFO
     if (locationType == LocationType.wfo) {
       final distance = Geolocator.distanceBetween(
         officeLat,
@@ -30,16 +27,15 @@ class CheckIn {
         long,
       );
 
-      if (distance > maxDistanceInMeters) {
+      if (distance > maxDistanceMeters) {
         return Left(
           AttendanceFailure(
-            'You are ${(distance - maxDistanceInMeters).toStringAsFixed(0)}m away from office. Please get closer.',
+            'You are ${(distance - maxDistanceMeters).toStringAsFixed(0)}m away from office. Please get closer.',
           ),
         );
       }
     }
 
-    // 2. Proceed to Check In
     return repository.checkIn(
       employeeId: employeeId,
       locationType: locationType,

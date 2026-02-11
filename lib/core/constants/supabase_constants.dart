@@ -11,4 +11,5 @@ class SupabaseConstants {
   static const String approvalsTable = 'approvals';
   static const String notificationsTable = 'notifications';
   static const String attendanceCorrectionsTable = 'attendance_corrections';
+  static const String officeLocationsTable = 'office_locations';
 }

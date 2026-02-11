@@ -4,13 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
 import 'package:hr_connect/core/theme/app_theme.dart';
 import 'package:hr_connect/features/attendance/domain/entities/attendance.dart';
-import 'package:hr_connect/features/attendance_map/presentation/screens/attendance_map_screen.dart';
 import 'package:hr_connect/features/attendance/presentation/providers/attendance_providers.dart';
 import 'package:hr_connect/features/attendance/presentation/providers/attendance_states.dart';
 import 'package:hr_connect/features/attendance/presentation/widgets/activity_history_list.dart';
 import 'package:hr_connect/features/attendance/presentation/widgets/attendance_metrics.dart';
 import 'package:hr_connect/features/attendance/presentation/widgets/calendar_strip.dart';
 import 'package:hr_connect/features/attendance/presentation/widgets/check_in_card.dart';
+import 'package:hr_connect/features/attendance_map/presentation/screens/attendance_map_screen.dart';
 import 'package:hr_connect/features/auth/presentation/providers/auth_providers.dart';
 import 'package:hr_connect/features/auth/presentation/providers/auth_states.dart';
 
@@ -21,7 +21,6 @@ class AttendanceScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final attendanceState = ref.watch(attendanceProvider);
     final authState = ref.watch(authProvider);
-
     final userName = switch (authState) {
       AuthLoaded(:final employee) => employee.fullName,
       _ => 'Employee',
@@ -95,8 +94,11 @@ class AttendanceScreen extends ConsumerWidget {
   ) {
     return switch (state) {
       AttendanceLoading() => const CheckInCardShimmer(),
-      AttendanceLoaded(:final todayAttendance) =>
-        _buildCheckInCardContent(context, ref, todayAttendance),
+      AttendanceLoaded(:final todayAttendance) => _buildCheckInCardContent(
+        context,
+        ref,
+        todayAttendance,
+      ),
       AttendanceError(:final message) => Center(
         child: Column(
           children: [
@@ -156,5 +158,4 @@ class AttendanceScreen extends ConsumerWidget {
       },
     );
   }
-
 }

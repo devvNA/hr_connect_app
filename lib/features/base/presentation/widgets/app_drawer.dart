@@ -219,19 +219,6 @@ class AppDrawer extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Logo
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: AppSpacing.lg,
-                      horizontal: AppSpacing.lg,
-                    ),
-                    child: Image.asset(
-                      'assets/logo.png',
-                      width: 100,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
                 const Divider(color: AppColors.border, height: 1),
                 const SizedBox(height: AppSpacing.lg),
                 InkWell(

@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hr_connect/core/theme/app_color.dart';
 import 'package:hr_connect/core/theme/app_theme.dart';
-import 'package:hr_connect/features/attendance/domain/usecases/check_in.dart';
 import 'package:hr_connect/features/attendance_map/presentation/providers/attendance_map_providers.dart';
 import 'package:hr_connect/features/attendance_map/presentation/providers/attendance_map_states.dart';
 import 'package:hr_connect/features/attendance_map/presentation/widgets/location_info_card.dart';
@@ -54,16 +53,16 @@ class _AttendanceMapScreenState extends ConsumerState<AttendanceMapScreen> {
       // Fit map to show both office and user when location is fetched
       if (next is AttendanceMapLocated && _mapReady) {
         try {
-          final officeLocation = LatLng(CheckIn.officeLat, CheckIn.officeLong);
+          final officeLatLng = LatLng(
+            next.office.latitude,
+            next.office.longitude,
+          );
           final bounds = LatLngBounds.fromPoints([
-            officeLocation,
+            officeLatLng,
             next.currentLocation,
           ]);
           _mapController.fitCamera(
-            CameraFit.bounds(
-              bounds: bounds,
-              padding: const EdgeInsets.all(60),
-            ),
+            CameraFit.bounds(bounds: bounds, padding: const EdgeInsets.all(60)),
           );
         } catch (_) {}
       }
@@ -178,27 +177,31 @@ class _AttendanceMapScreenState extends ConsumerState<AttendanceMapScreen> {
   Widget _buildMapContent(AttendanceMapLocated state) {
     return Column(
       children: [
-        const SizedBox(height: AppSpacing.lg),
+        const SizedBox(height: AppSpacing.sm),
         Expanded(
           child: AttendanceMapView(
             mapController: _mapController,
             currentLocation: state.currentLocation,
             isWithinRadius: state.isWithinRadius,
+            office: state.office,
             onMapReady: () => _mapReady = true,
           ),
         ),
-        const SizedBox(height: AppSpacing.lg),
+        const SizedBox(height: AppSpacing.md),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           child: LocationInfoCard(
             isWithinRadius: state.isWithinRadius,
             distanceToOffice: state.distanceToOffice,
+            officeName: state.office.name,
             onNavigate: () {
               try {
-                final officeLocation =
-                    LatLng(CheckIn.officeLat, CheckIn.officeLong);
+                final officeLatLng = LatLng(
+                  state.office.latitude,
+                  state.office.longitude,
+                );
                 final bounds = LatLngBounds.fromPoints([
-                  officeLocation,
+                  officeLatLng,
                   state.currentLocation,
                 ]);
                 _mapController.fitCamera(
@@ -211,12 +214,12 @@ class _AttendanceMapScreenState extends ConsumerState<AttendanceMapScreen> {
             },
           ),
         ),
-        const SizedBox(height: AppSpacing.lg),
+        const SizedBox(height: AppSpacing.md),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           child: _buildConfirmButton(state),
         ),
-        const SizedBox(height: AppSpacing.sm),
+        const SizedBox(height: AppSpacing.md),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           child: Text(
@@ -227,7 +230,6 @@ class _AttendanceMapScreenState extends ConsumerState<AttendanceMapScreen> {
             textAlign: TextAlign.center,
           ),
         ),
-        const SizedBox(height: AppSpacing.lg),
       ],
     );
   }

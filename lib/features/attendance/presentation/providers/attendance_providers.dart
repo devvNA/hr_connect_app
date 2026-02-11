@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'dart:developer';
+
 import 'package:hr_connect/features/attendance/data/datasources/attendance_remote_datasource.dart';
 import 'package:hr_connect/features/attendance/data/repository/attendance_repository.dart';
 import 'package:hr_connect/features/attendance/domain/entities/attendance.dart';
@@ -8,6 +9,7 @@ import 'package:hr_connect/features/attendance/domain/usecases/check_out.dart';
 import 'package:hr_connect/features/attendance/domain/usecases/get_monthly_attendance.dart';
 import 'package:hr_connect/features/attendance/domain/usecases/get_today_attendance.dart';
 import 'package:hr_connect/features/attendance/presentation/providers/attendance_states.dart';
+import 'package:hr_connect/features/attendance_map/presentation/providers/attendance_map_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -69,7 +71,7 @@ class AttendanceNotifier extends _$AttendanceNotifier {
     }
 
     try {
-      debugPrint('[Attendance] Loading data for user: ${user.id}');
+      log('[Attendance] Loading data for user: ${user.id}');
 
       // Fetch today's attendance
       final todayResult = await ref
@@ -84,22 +86,18 @@ class AttendanceNotifier extends _$AttendanceNotifier {
       // Combine results
       todayResult.fold(
         (failure) {
-          debugPrint('[Attendance] Error loading today: ${failure.message}');
+          log('[Attendance] Error loading today: ${failure.message}');
           state = AttendanceError(failure.message, source: 'init');
         },
         (todayAttendance) {
-          debugPrint(
-            '[Attendance] Today attendance loaded: ${todayAttendance?.id}',
-          );
+          log('[Attendance] Today attendance loaded: ${todayAttendance?.id}');
           monthlyResult.fold(
             (failure) {
-              debugPrint(
-                '[Attendance] Error loading monthly: ${failure.message}',
-              );
+              log('[Attendance] Error loading monthly: ${failure.message}');
               state = AttendanceError(failure.message, source: 'init');
             },
             (monthlyList) {
-              debugPrint(
+              log(
                 '[Attendance] Monthly attendance count: ${monthlyList.length}',
               );
               state = AttendanceLoaded(
@@ -111,8 +109,8 @@ class AttendanceNotifier extends _$AttendanceNotifier {
         },
       );
     } catch (e, stackTrace) {
-      debugPrint('[Attendance] Exception: $e');
-      debugPrint('[Attendance] StackTrace: $stackTrace');
+      log('[Attendance] Exception: $e');
+      log('[Attendance] StackTrace: $stackTrace');
       state = AttendanceError(e.toString(), source: 'init');
     }
   }
@@ -130,11 +128,23 @@ class AttendanceNotifier extends _$AttendanceNotifier {
     required double lat,
     required double long,
   }) async {
-    debugPrint('[Attendance] Check-in started for: $employeeId');
-    debugPrint('[Attendance] Location: $lat, $long');
+    log('[Attendance] Check-in started for: $employeeId');
+    log('[Attendance] Location: $lat, $long');
     state = AttendanceLoading();
 
     try {
+      final officeResult = await ref
+          .read(getActiveOfficeUseCaseProvider)
+          .call();
+      final office = officeResult.fold((failure) => null, (office) => office);
+      if (office == null) {
+        state = const AttendanceError(
+          'Office location not loaded',
+          source: 'checkIn',
+        );
+        return;
+      }
+
       final result = await ref
           .read(checkInUseCaseProvider)
           .call(
@@ -142,29 +152,32 @@ class AttendanceNotifier extends _$AttendanceNotifier {
             locationType: locationType,
             lat: lat,
             long: long,
+            officeLat: office.latitude,
+            officeLong: office.longitude,
+            maxDistanceMeters: office.radiusMeters,
           );
 
       result.fold(
         (failure) {
-          debugPrint('[Attendance] Check-in failed: ${failure.message}');
+          log('[Attendance] Check-in failed: ${failure.message}');
           state = AttendanceError(failure.message, source: 'checkIn');
         },
         (attendance) async {
-          debugPrint('[Attendance] Check-in success: ${attendance.id}');
+          log('[Attendance] Check-in success: ${attendance.id}');
           // Reload all data after successful check-in
           await _loadInitialData();
         },
       );
     } catch (e, stackTrace) {
-      debugPrint('[Attendance] Check-in exception: $e');
-      debugPrint('[Attendance] StackTrace: $stackTrace');
+      log('[Attendance] Check-in exception: $e');
+      log('[Attendance] StackTrace: $stackTrace');
       state = AttendanceError(e.toString(), source: 'checkIn');
     }
   }
 
   /// Check out from today's attendance
   Future<void> checkOut(String attendanceId) async {
-    debugPrint('[Attendance] Check-out started for: $attendanceId');
+    log('[Attendance] Check-out started for: $attendanceId');
     state = AttendanceLoading();
 
     try {
@@ -174,18 +187,18 @@ class AttendanceNotifier extends _$AttendanceNotifier {
 
       result.fold(
         (failure) {
-          debugPrint('[Attendance] Check-out failed: ${failure.message}');
+          log('[Attendance] Check-out failed: ${failure.message}');
           state = AttendanceError(failure.message, source: 'checkOut');
         },
         (attendance) async {
-          debugPrint('[Attendance] Check-out success: ${attendance.id}');
+          log('[Attendance] Check-out success: ${attendance.id}');
           // Reload all data after successful check-out
           await _loadInitialData();
         },
       );
     } catch (e, stackTrace) {
-      debugPrint('[Attendance] Check-out exception: $e');
-      debugPrint('[Attendance] StackTrace: $stackTrace');
+      log('[Attendance] Check-out exception: $e');
+      log('[Attendance] StackTrace: $stackTrace');
       state = AttendanceError(e.toString(), source: 'checkOut');
     }
   }
