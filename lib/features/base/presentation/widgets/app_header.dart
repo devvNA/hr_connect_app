@@ -21,7 +21,6 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentDestination = ref.watch(navigationProvider);
-    final isDashboard = currentDestination == NavigationDestination.dashboard;
     final title = currentDestination.displayTitle;
 
     return Container(
@@ -41,49 +40,32 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.menu, color: Colors.black87),
-                    onPressed: onMenuPressed,
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    style: IconButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                  // HR Logo - only show on dashboard
-                  if (isDashboard) ...[
-                    Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: AppRadius.smRadius,
+              Expanded(
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.menu, color: Colors.black87),
+                      onPressed: onMenuPressed,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      style: IconButton.styleFrom(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      child: Center(
-                        child: Text(
-                          'HR',
-                          style: AppTypography.labelMedium.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    ),
+                    const SizedBox(width: AppSpacing.md),
+                    // Title
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: AppTypography.displaySmall.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          letterSpacing: -0.5,
                         ),
                       ),
                     ),
-                    const SizedBox(width: AppSpacing.sm),
                   ],
-                  // Title
-                  Text(
-                    title,
-                    style: AppTypography.displaySmall.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                ],
+                ),
               ),
               Row(
                 children: [

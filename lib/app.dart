@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:device_preview_plus/device_preview_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,7 +58,10 @@ Future<void> bootstrap(Flavor flavor) async {
   runApp(
     ProviderScope(
       overrides: [appConfigProvider.overrideWithValue(config)],
-      child: const MyApp(),
+      child: DevicePreview(
+        enabled: !kReleaseMode,
+        builder: (context) => const MyApp(),
+      ),
     ),
   );
 }

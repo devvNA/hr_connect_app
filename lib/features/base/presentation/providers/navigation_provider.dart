@@ -38,7 +38,7 @@ extension NavigationDestinationX on NavigationDestination {
   String get displayTitle {
     switch (this) {
       case NavigationDestination.dashboard:
-        return 'Connect';
+        return 'Dashboard';
       case NavigationDestination.employees:
         return 'Employees';
       case NavigationDestination.attendance:

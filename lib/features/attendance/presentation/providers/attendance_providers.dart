@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hr_connect/features/attendance/data/datasources/attendance_remote_datasource.dart';
 import 'package:hr_connect/features/attendance/data/repository/attendance_repository.dart';
 import 'package:hr_connect/features/attendance/domain/entities/attendance.dart';
@@ -12,14 +13,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'attendance_providers.g.dart';
 
-// --- DATA LAYER PROVIDERS ---
+// --- DATA LAYER PROVIDERS (keepAlive to prevent disposal during async ops) ---
 
-@riverpod
+@Riverpod(keepAlive: true)
 AttendanceRemoteDataSource attendanceRemoteDataSource(Ref ref) {
   return AttendanceRemoteDataSourceImpl(Supabase.instance.client);
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 AttendanceRepository attendanceRepository(Ref ref) {
   return AttendanceRepositoryImpl(
     ref.watch(attendanceRemoteDataSourceProvider),
@@ -28,29 +29,29 @@ AttendanceRepository attendanceRepository(Ref ref) {
 
 // --- USE CASE PROVIDERS ---
 
-@riverpod
+@Riverpod(keepAlive: true)
 CheckIn checkInUseCase(Ref ref) {
   return CheckIn(ref.watch(attendanceRepositoryProvider));
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 CheckOut checkOutUseCase(Ref ref) {
   return CheckOut(ref.watch(attendanceRepositoryProvider));
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 GetTodayAttendance getTodayAttendanceUseCase(Ref ref) {
   return GetTodayAttendance(ref.watch(attendanceRepositoryProvider));
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 GetMonthlyAttendance getMonthlyAttendanceUseCase(Ref ref) {
   return GetMonthlyAttendance(ref.watch(attendanceRepositoryProvider));
 }
 
 // --- STATE NOTIFIER ---
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AttendanceNotifier extends _$AttendanceNotifier {
   @override
   AttendanceState build() {
@@ -67,28 +68,53 @@ class AttendanceNotifier extends _$AttendanceNotifier {
       return;
     }
 
-    // Fetch today's attendance
-    final todayResult = await ref
-        .read(getTodayAttendanceUseCaseProvider)
-        .call(user.id);
-    final now = DateTime.now();
-    final monthlyResult = await ref
-        .read(getMonthlyAttendanceUseCaseProvider)
-        .call(employeeId: user.id, month: now.month, year: now.year);
+    try {
+      debugPrint('[Attendance] Loading data for user: ${user.id}');
 
-    // Combine results
-    todayResult.fold(
-      (failure) => state = AttendanceError(failure.message, source: 'init'),
-      (todayAttendance) {
-        monthlyResult.fold(
-          (failure) => state = AttendanceError(failure.message, source: 'init'),
-          (monthlyList) => state = AttendanceLoaded(
-            todayAttendance: todayAttendance,
-            monthlyAttendance: monthlyList,
-          ),
-        );
-      },
-    );
+      // Fetch today's attendance
+      final todayResult = await ref
+          .read(getTodayAttendanceUseCaseProvider)
+          .call(user.id);
+
+      final now = DateTime.now();
+      final monthlyResult = await ref
+          .read(getMonthlyAttendanceUseCaseProvider)
+          .call(employeeId: user.id, month: now.month, year: now.year);
+
+      // Combine results
+      todayResult.fold(
+        (failure) {
+          debugPrint('[Attendance] Error loading today: ${failure.message}');
+          state = AttendanceError(failure.message, source: 'init');
+        },
+        (todayAttendance) {
+          debugPrint(
+            '[Attendance] Today attendance loaded: ${todayAttendance?.id}',
+          );
+          monthlyResult.fold(
+            (failure) {
+              debugPrint(
+                '[Attendance] Error loading monthly: ${failure.message}',
+              );
+              state = AttendanceError(failure.message, source: 'init');
+            },
+            (monthlyList) {
+              debugPrint(
+                '[Attendance] Monthly attendance count: ${monthlyList.length}',
+              );
+              state = AttendanceLoaded(
+                todayAttendance: todayAttendance,
+                monthlyAttendance: monthlyList,
+              );
+            },
+          );
+        },
+      );
+    } catch (e, stackTrace) {
+      debugPrint('[Attendance] Exception: $e');
+      debugPrint('[Attendance] StackTrace: $stackTrace');
+      state = AttendanceError(e.toString(), source: 'init');
+    }
   }
 
   /// Refresh all attendance data
@@ -104,41 +130,64 @@ class AttendanceNotifier extends _$AttendanceNotifier {
     required double lat,
     required double long,
   }) async {
+    debugPrint('[Attendance] Check-in started for: $employeeId');
+    debugPrint('[Attendance] Location: $lat, $long');
     state = AttendanceLoading();
 
-    final result = await ref
-        .read(checkInUseCaseProvider)
-        .call(
-          employeeId: employeeId,
-          locationType: locationType,
-          lat: lat,
-          long: long,
-        );
+    try {
+      final result = await ref
+          .read(checkInUseCaseProvider)
+          .call(
+            employeeId: employeeId,
+            locationType: locationType,
+            lat: lat,
+            long: long,
+          );
 
-    result.fold(
-      (failure) => state = AttendanceError(failure.message, source: 'checkIn'),
-      (attendance) async {
-        // Reload all data after successful check-in
-        await _loadInitialData();
-      },
-    );
+      result.fold(
+        (failure) {
+          debugPrint('[Attendance] Check-in failed: ${failure.message}');
+          state = AttendanceError(failure.message, source: 'checkIn');
+        },
+        (attendance) async {
+          debugPrint('[Attendance] Check-in success: ${attendance.id}');
+          // Reload all data after successful check-in
+          await _loadInitialData();
+        },
+      );
+    } catch (e, stackTrace) {
+      debugPrint('[Attendance] Check-in exception: $e');
+      debugPrint('[Attendance] StackTrace: $stackTrace');
+      state = AttendanceError(e.toString(), source: 'checkIn');
+    }
   }
 
   /// Check out from today's attendance
   Future<void> checkOut(String attendanceId) async {
+    debugPrint('[Attendance] Check-out started for: $attendanceId');
     state = AttendanceLoading();
 
-    final result = await ref
-        .read(checkOutUseCaseProvider)
-        .call(attendanceId: attendanceId);
+    try {
+      final result = await ref
+          .read(checkOutUseCaseProvider)
+          .call(attendanceId: attendanceId);
 
-    result.fold(
-      (failure) => state = AttendanceError(failure.message, source: 'checkOut'),
-      (attendance) async {
-        // Reload all data after successful check-out
-        await _loadInitialData();
-      },
-    );
+      result.fold(
+        (failure) {
+          debugPrint('[Attendance] Check-out failed: ${failure.message}');
+          state = AttendanceError(failure.message, source: 'checkOut');
+        },
+        (attendance) async {
+          debugPrint('[Attendance] Check-out success: ${attendance.id}');
+          // Reload all data after successful check-out
+          await _loadInitialData();
+        },
+      );
+    } catch (e, stackTrace) {
+      debugPrint('[Attendance] Check-out exception: $e');
+      debugPrint('[Attendance] StackTrace: $stackTrace');
+      state = AttendanceError(e.toString(), source: 'checkOut');
+    }
   }
 
   /// Load attendance for a specific month

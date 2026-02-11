@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hr_connect/features/attendance/presentation/screens/attendance_screen.dart';
+import 'package:hr_connect/features/attendance_map/presentation/screens/attendance_map_screen.dart';
 import 'package:hr_connect/features/auth/presentation/providers/auth_providers.dart';
 import 'package:hr_connect/features/auth/presentation/providers/auth_states.dart';
 import 'package:hr_connect/features/auth/presentation/screens/login_screen.dart';
@@ -38,6 +39,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/register',
         name: 'register',
         builder: (context, state) => const RegisterScreen(),
+      ),
+
+      // Attendance map screen (used for both check-in and check-out)
+      GoRoute(
+        path: '/attendance/map',
+        name: 'attendance-map',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final mode = extra?['mode'] as AttendanceMapMode? ?? AttendanceMapMode.checkIn;
+          final attendanceId = extra?['attendanceId'] as String?;
+          return AttendanceMapScreen(
+            mode: mode,
+            attendanceId: attendanceId,
+          );
+        },
       ),
 
       // Main shell with persistent drawer/header

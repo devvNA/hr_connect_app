@@ -11,8 +11,8 @@ class CheckIn {
   CheckIn(this.repository);
 
   // Example: Office Location (Monas, Jakarta)
-  static const double officeLat = -7.3809654137189815;
-  static const double officeLong = 109.25415355263853;
+  static const double officeLat = -6.175258;
+  static const double officeLong = 106.827008;
   static const double maxDistanceInMeters = 120;
 
   Future<Either<Failure, Attendance>> call({

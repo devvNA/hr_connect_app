@@ -27,7 +27,7 @@ final class AttendanceRemoteDataSourceProvider
         argument: null,
         retry: null,
         name: r'attendanceRemoteDataSourceProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -56,7 +56,7 @@ final class AttendanceRemoteDataSourceProvider
 }
 
 String _$attendanceRemoteDataSourceHash() =>
-    r'5ac20329f69ede868415040f57ea0c839275a231';
+    r'3195fc5f698da92eccf3edbc99b0321829403bba';
 
 @ProviderFor(attendanceRepository)
 final attendanceRepositoryProvider = AttendanceRepositoryProvider._();
@@ -75,7 +75,7 @@ final class AttendanceRepositoryProvider
         argument: null,
         retry: null,
         name: r'attendanceRepositoryProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -104,7 +104,7 @@ final class AttendanceRepositoryProvider
 }
 
 String _$attendanceRepositoryHash() =>
-    r'e89142730dad6d75c97afa6a5d185c777cf1275a';
+    r'f6f99859243ef093505e71c28a5c840d9bda8c1d';
 
 @ProviderFor(checkInUseCase)
 final checkInUseCaseProvider = CheckInUseCaseProvider._();
@@ -118,7 +118,7 @@ final class CheckInUseCaseProvider
         argument: null,
         retry: null,
         name: r'checkInUseCaseProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -145,7 +145,7 @@ final class CheckInUseCaseProvider
   }
 }
 
-String _$checkInUseCaseHash() => r'4c79d9605cb5b970b00e1a3a2a94892120813690';
+String _$checkInUseCaseHash() => r'd2f0eab953c936423c9eb394ccceefc14b743d11';
 
 @ProviderFor(checkOutUseCase)
 final checkOutUseCaseProvider = CheckOutUseCaseProvider._();
@@ -159,7 +159,7 @@ final class CheckOutUseCaseProvider
         argument: null,
         retry: null,
         name: r'checkOutUseCaseProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -186,7 +186,7 @@ final class CheckOutUseCaseProvider
   }
 }
 
-String _$checkOutUseCaseHash() => r'4eb676ea2fcc3df3bce178da653f4a01f4ee7e91';
+String _$checkOutUseCaseHash() => r'17b24fd74f5ee6b3197b9acb763224a81fdd3b0c';
 
 @ProviderFor(getTodayAttendanceUseCase)
 final getTodayAttendanceUseCaseProvider = GetTodayAttendanceUseCaseProvider._();
@@ -205,7 +205,7 @@ final class GetTodayAttendanceUseCaseProvider
         argument: null,
         retry: null,
         name: r'getTodayAttendanceUseCaseProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -234,7 +234,7 @@ final class GetTodayAttendanceUseCaseProvider
 }
 
 String _$getTodayAttendanceUseCaseHash() =>
-    r'b92d45ba7b00c9fee68defda83b4745064db35db';
+    r'8ec53a53fafe4b39f48932c87e23c14366598aa9';
 
 @ProviderFor(getMonthlyAttendanceUseCase)
 final getMonthlyAttendanceUseCaseProvider =
@@ -254,7 +254,7 @@ final class GetMonthlyAttendanceUseCaseProvider
         argument: null,
         retry: null,
         name: r'getMonthlyAttendanceUseCaseProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -283,7 +283,7 @@ final class GetMonthlyAttendanceUseCaseProvider
 }
 
 String _$getMonthlyAttendanceUseCaseHash() =>
-    r'7a46bfcb5f95ec27665238ab1dcf354afa84674a';
+    r'503075f0410ca67d973f130464316458ff25ce73';
 
 @ProviderFor(AttendanceNotifier)
 final attendanceProvider = AttendanceNotifierProvider._();
@@ -296,7 +296,7 @@ final class AttendanceNotifierProvider
         argument: null,
         retry: null,
         name: r'attendanceProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -318,7 +318,7 @@ final class AttendanceNotifierProvider
 }
 
 String _$attendanceNotifierHash() =>
-    r'1af0f9b441e5c84277fa563327c8ff7c62019fae';
+    r'838f74ede0503cf2221cce784044e939250f098c';
 
 abstract class _$AttendanceNotifier extends $Notifier<AttendanceState> {
   AttendanceState build();
